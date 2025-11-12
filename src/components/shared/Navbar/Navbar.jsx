@@ -30,7 +30,7 @@ const Navbar = () => {
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
                         {navLinks}
                         <li>
-                            <a>Profile</a>
+                            <a>Account</a>
                             <ul className="p-2">
                                 {subNavLinks}
                             </ul>
@@ -40,7 +40,7 @@ const Navbar = () => {
                 <VendoSphereLogo></VendoSphereLogo>
             </div>
             <div className="navbar-center hidden lg:flex">
-                <ul className="menu menu-horizontal px-1">
+                <ul className="menu menu-horizontal text-xl px-1">
                     {navLinks}
                     {/* <li><NavLink to="profile"><details>
                             <summary>Profile</summary>
@@ -50,7 +50,7 @@ const Navbar = () => {
                         </details></NavLink></li> */}
                     <li>
                         <details>
-                            <summary>Profile</summary>
+                            <summary>Account</summary>
                             <ul className="p-2">
                                 {subNavLinks}
                             </ul>
