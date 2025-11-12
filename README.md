@@ -6,9 +6,9 @@ It includes a modern React frontend and a secure Node.js + MongoDB backend.
 
 ### 🌐 Live Demo :
 
-# 🔗 Frontend repo: https://your-frontend-demo-link.vercel.app
+ 🔗 Frontend repo: https://your-frontend-demo-link.vercel.app
 
-# 🔗 Backend repo: https://your-backend-api.onrender.com
+ 🔗 Backend repo: https://your-backend-api.onrender.com
 
 
 ---
@@ -105,7 +105,7 @@ Prerequisites
 
 ### 👩‍💻 Author
 Your Name
-📧 yourname@example.com
+📧 infowebdevelopment281@gmail.com
 
 🌐 GitHub
 
