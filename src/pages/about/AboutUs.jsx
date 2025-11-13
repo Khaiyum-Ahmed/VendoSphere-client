@@ -6,7 +6,7 @@ const AboutUs = () => {
     return (
         <div className="bg-base-100 text-base-content">
             {/* Hero Section */}
-            <section className="hero mt-10 min-h-[60vh] bg-gradient-to-r from-primary to-secondary text-primary-content rounded-2xl">
+            <section className="hero mt-10 min-h-[60vh] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-primary-content rounded-2xl">
                 <div className="hero-content text-center">
                     <div className="max-w-2xl">
                         <Motion.h1

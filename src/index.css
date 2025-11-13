@@ -1,9 +1,20 @@
-
 @import "tailwindcss";
 @plugin "daisyui";
 
-a.active{
+@plugin "daisyui" {
+    themes: light --default, dark  --prefersdark;
+    logs: true;
+};
+
+@plugin "daisyui/theme" {
+    name: "light";
+    default: true;
+    --color-primary: #f07f13;
+    --color-secondary: #333e48;
+};
+
+a.active {
     font-weight: 900;
-    font-size: 22px;
-    color: rgb(72, 139, 26);
-}
+    font-size: 18px;
+    color: #f07f13;
+};

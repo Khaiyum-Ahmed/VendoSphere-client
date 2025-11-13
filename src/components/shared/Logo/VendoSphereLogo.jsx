@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import logoImg from "../../../assets/shopping-cart.png"
+import logoImg from "../../../assets/images/shopping-cart.png"
 import { motion as Motion } from "motion/react"
 const VendoSphereLogo = () => {
     return (
