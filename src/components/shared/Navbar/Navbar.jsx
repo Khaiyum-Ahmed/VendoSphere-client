@@ -1,7 +1,18 @@
-import { NavLink } from "react-router"; // ✅ use react-router-dom
+import { Link, NavLink } from "react-router"; // ✅ use react-router-dom
 import VendoSphereLogo from "../Logo/VendoSphereLogo";
+import UseAuth from "../../../hooks/UseAuth";
 
 const Navbar = () => {
+
+  const { user, logOutUser } = UseAuth();
+  const userLogOut = () => {
+    logOutUser()
+      .then(() => console.log("Sign-Out successfully"))
+      .catch(error => {
+        console.log(error)
+      })
+  }
+
   // 🟩 Step 1: Create your Profile submenu items
   const profileSubMenu = (
     <>
@@ -78,7 +89,21 @@ const Navbar = () => {
 
       {/* 🟩 Navbar Right (Button or anything else) */}
       <div className="navbar-end">
-        <a className="btn bg-primary text-primary-content">Sign Up</a>
+        {
+          user ? <>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
+                <img className="w-10 h-10 rounded-full" src={user.photoURL} alt="Profile Picture" />
+                <p className="font-medium">{user?.displayName}</p>
+
+              </div>
+              <button onClick={userLogOut} className="btn btn-primary text-white font-bold">Log Out</button>
+            </div>
+          </> : <>
+            <Link to="/login" className="btn btn-primary text-white">LogIn</Link>
+          </>
+        }
+        {/* <a className="btn bg-primary text-white">Sign Up</a> */}
       </div>
     </div>
   );

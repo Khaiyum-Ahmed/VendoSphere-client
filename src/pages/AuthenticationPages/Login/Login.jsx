@@ -1,13 +1,14 @@
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import Swal from "sweetalert2";
-// import { useAuth } from "../../hooks/useAuth"; // your Firebase custom hook
+
 import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import UseAuth from "../../../hooks/UseAuth";
 
 const Login = () => {
   const navigate = useNavigate();
-//   const { login, user, loading } = useAuth();
+  const { signInUser, user, loading } = UseAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -16,16 +17,16 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  // Redirect if already logged in
-//   useEffect(() => {
-//     if (user) navigate("/");
-//   }, [user, navigate]);
+//   Redirect if already logged in
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user, navigate]);
 
   const onSubmit = async (data) => {
     const { email, password } = data;
 
     try {
-      await login(email, password);
+      await signInUser(email, password);
 
       Swal.fire({
         icon: "success",
@@ -84,10 +85,10 @@ const Login = () => {
         {/* Login Button */}
         <button
           type="submit"
-        //   disabled={loading}
-          className="btn btn-primary w-full mt-2"
+          disabled={loading}
+          className="btn btn-primary w-full mt-2 text-white text-base"
         >
-          {/* {loading ? "Logging in..." : "Login"} */}
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
 
