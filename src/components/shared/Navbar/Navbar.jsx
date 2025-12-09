@@ -1,6 +1,7 @@
 import { Link, NavLink } from "react-router"; // ✅ use react-router-dom
 import VendoSphereLogo from "../Logo/VendoSphereLogo";
 import UseAuth from "../../../hooks/UseAuth";
+import { FiShoppingCart } from "react-icons/fi";
 
 const Navbar = () => {
 
@@ -21,14 +22,14 @@ const Navbar = () => {
       <li><NavLink to="/wishlist">Wishlist</NavLink></li>
       <li><NavLink to="/settings">Settings</NavLink></li>
       {
-        user? 
-        <>
-        <button onClick={userLogOut} className="btn btn-primary text-white font-medium btn-sm ">Log Out</button>
-        </>
-        :
-        <>
-        <li><NavLink to="/login">Log In</NavLink></li>
-        </>
+        user ?
+          <>
+            <button onClick={userLogOut} className="btn btn-primary text-white font-medium btn-sm ">Log Out</button>
+          </>
+          :
+          <>
+            <li><NavLink to="/login">Log In</NavLink></li>
+          </>
       }
     </>
   );
@@ -41,7 +42,12 @@ const Navbar = () => {
       <li><NavLink to="/about">About</NavLink></li>
       <li><NavLink to="/become-seller">Become a Seller</NavLink></li>
       <li><NavLink to="/contact">Contact</NavLink></li>
-      <li><NavLink to="/cart">Cart</NavLink></li>
+      {/* <li><NavLink to="/cart">Cart</NavLink></li> */}
+      {/* <li>
+        <NavLink to="/cart">
+          <FiShoppingCart size={22}/>
+        </NavLink>
+      </li> */}
 
       {/* 🟩 Step 3: Add the Profile dropdown here */}
       <li>
@@ -52,6 +58,7 @@ const Navbar = () => {
           </ul>
         </details>
       </li>
+
     </>
   );
 
@@ -98,6 +105,11 @@ const Navbar = () => {
 
       {/* 🟩 Navbar Right (Button or anything else) */}
       <div className="navbar-end">
+
+        <div className="mr-4"><NavLink to="/cart">
+          <FiShoppingCart size={24} />
+        </NavLink></div>
+
         {
           user ? <>
             <div className="flex items-center gap-2">

@@ -1,11 +1,12 @@
 import UseAuth from "../../../hooks/UseAuth";
+import HeroSection from "./HeroSection/HeroSection";
 
 const Home = () => {
     const {user} = UseAuth()
     console.log(user)
     return (
         <div>
-            <h1>home page</h1>
+            <HeroSection></HeroSection>
         </div>
     );
 };
