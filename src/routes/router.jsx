@@ -8,6 +8,8 @@ import AuthLayouts from "../components/layouts/AuthLayouts";
 import Login from "../pages/AuthenticationPages/Login/Login";
 import Register from "../pages/AuthenticationPages/Register/Register";
 import BecomeSeller from "../pages/BecomeASeller/BecomeSeller";
+import PrivateRoutes from "./PrivateRoutes/PrivateRoutes";
+import Forbidden from "../pages/Forbidden/Forbidden";
 
 export const router = createBrowserRouter([
   {
@@ -29,7 +31,11 @@ export const router = createBrowserRouter([
         },
         {
           path:'become-seller',
-          Component:BecomeSeller
+          element: <PrivateRoutes><BecomeSeller></BecomeSeller></PrivateRoutes>
+        },
+        {
+          path: 'forbidden',
+          Component: Forbidden
         }
     ]
   },
