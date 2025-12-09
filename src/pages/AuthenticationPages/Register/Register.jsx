@@ -1,93 +1,102 @@
-import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router";
-import Swal from "sweetalert2";
-import UseAuth from "../../../hooks/UseAuth";
-
+import React, { useState } from 'react';
+import { Form, Link, useLocation, useNavigate } from 'react-router';
+import { useForm } from 'react-hook-form';
+import UseAuth from '../../../hooks/UseAuth';
+import axios from 'axios';
+import UseAxios from '../../../hooks/UseAxios';
+import SocialLogin from '../Login/SocialLogin';
 
 const Register = () => {
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { createUser, updateUserProfile } = UseAuth();
+    const location = useLocation();
     const navigate = useNavigate();
-    // const { signup, loading } = useAuth();
-    const {user, createUser,loading} = UseAuth();
+    const [profilePic, setProfilePic] = useState('');
+    const axiosInstance = UseAxios();
 
-    const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-    // Mutation for MongoDB user save
-    const mutation = useMutation({
-        // mutationFn: async (userInfo) => {
-        //     const res = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
-        //         method: "POST",
-        //         headers: { "Content-Type": "application/json" },
-        //         body: JSON.stringify(userInfo),
-        //     });
-        //     if (!res.ok) throw new Error("Failed to save user data");
-        //     return res.json();
-        // },
-        onSuccess: () => {
-            Swal.fire({
-                icon: "success",
-                title: "Registration Successful!",
-                text: "Welcome to our e-commerce platform 🎉",
-                confirmButtonColor: "#570DF8",
-            });
-            reset();
-            navigate("/");
-        },
-        onError: () => {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "Failed to save user info in database.",
-            });
-        },
-    });
+    const from = location.state?.from || "/";
+    const handleRegister = (data) => {
+        console.log(data);
+        createUser(data.email, data.password)
+            .then(async (result) => {
+                console.log(result.user);
 
-    const onSubmit = async (data) => {
-        const { name, email, password, phone, role, address } = data;
-        console.log(user, data)
-        try {
-            const user = await createUser(email, password, name);
-            if (user) {
+                // update user info in the database
                 const userInfo = {
-                    uid: user.uid,
-                    name,
-                    email,
-                    phone,
-                    role,
-                    address,
-                };
-                mutation.mutate(userInfo);
-            }
-        } catch (err) {
-            Swal.fire({
-                icon: "error",
-                title: "Signup Failed",
-                text: err.message,
-            });
-        }
-    };
+                    email: data.email,
+                    name: data.name,
+                    role: data.role, // default role
+                    phone: data.phone,
+                    address: data.address,
+                    image: profilePic,
+                    created_at: new Date().toISOString(),
+                    last_log_in: new Date().toISOString()
+                }
+                const userRes = await axiosInstance.post('/users', userInfo);
+                console.log(userRes.data, userInfo)
 
+
+                // update user profile in firebase
+                const userProfile = {
+                    displayName: data.name,
+                    photoURL: profilePic
+                }
+                updateUserProfile(userProfile)
+                    .then(() => {
+                        console.log('profile name & pic updated')
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                navigate(from)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+    const handleImageUpload = async (e) => {
+        const image = e.target.files[0];
+        console.log(image);
+
+        const formData = new FormData();
+        formData.append('image', image);
+
+        const imageUploadUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_upload_key}`;
+
+        const res = await axios.post(imageUploadUrl, formData)
+        setProfilePic(res.data.data.url)
+    }
     return (
-        <div className="flex justify-center items-center">
-            <div className="card w-full max-w-md bg-base-100 shadow-xl p-8">
-                <h2 className="text-3xl font-bold text-center mb-6">Create Account</h2>
+        <div className='max-w-xl'>
+            <form onSubmit={handleSubmit(handleRegister)}>
+                <div className='mb-6'>
+                    <h1 className='text-black font-extrabold text-5xl mb-2'>Create an Account</h1>
+                    <p className='font-medium text-base'>Register with VendoSphere</p>
+                </div>
+                <fieldset className="fieldset">
+                    {/* Image field */}
+                    <input type="file"
+                        onChange={handleImageUpload}
+                        className="input w-full"
+                        placeholder="Upload Your Profile Picture" />
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-                    <input
-                        {...register("name", { required: "Full name is required" })}
-                        placeholder="Full Name"
-                        className="input input-bordered w-full"
-                    />
-                    <p className="text-error text-sm">{errors.name?.message}</p>
 
-                    <input
-                        {...register("email", { required: "Email is required" })}
-                        type="email"
-                        placeholder="Email Address"
-                        className="input input-bordered w-full"
-                    />
-                    <p className="text-error text-sm">{errors.email?.message}</p>
+                    {/* name field */}
+                    <input type="text"
+                        {...register("name", { required: true, minLength: 6 })}
+                        className="input w-full" placeholder="Your Name" />
+                    {errors.name?.type === "required" && (<p className='text-red-500'>Name is required?</p>)}
+                    {errors.name?.type === "minLength" && (<p className='text-red-500'>Name must be 4 characters or longer!</p>)}
 
+                    {/* email field */}
+                    <input type="email"
+                        {...register("email", { required: "email address is required" })}
+                        aria-invalid={errors.email ? "true" : "false"}
+                        className="input w-full" placeholder="Email" />
+                    {errors.email && <p className='text-red-500'>{errors.email.message}</p>}
+
+                    {/* Phone */}
                     <input
                         {...register("phone", { required: "Phone number is required" })}
                         placeholder="Phone Number"
@@ -95,12 +104,14 @@ const Register = () => {
                     />
                     <p className="text-error text-sm">{errors.phone?.message}</p>
 
+                    {/* Address */}
                     <input
                         {...register("address")}
                         placeholder="Address (optional)"
                         className="input input-bordered w-full"
                     />
 
+                    {/* Role */}
                     <select
                         {...register("role", { required: "Select a role" })}
                         className="select select-bordered w-full"
@@ -111,33 +122,21 @@ const Register = () => {
                     </select>
                     <p className="text-error text-sm">{errors.role?.message}</p>
 
-                    <input
-                        {...register("password", {
-                            required: "Password required",
-                            minLength: { value: 6, message: "At least 6 characters" },
-                        })}
-                        type="password"
-                        placeholder="Password"
-                        className="input input-bordered w-full"
-                    />
-                    <p className="text-error text-sm">{errors.password?.message}</p>
 
-                    <button
-                        type="submit"
-                        disabled={loading || mutation.isLoading}
-                        className="btn btn-primary w-full mt-4"
-                    >
-                        {loading || mutation.isLoading ? "Registering..." : "Register"}
-                    </button>
-                </form>
+                    {/* Password field */}
+                    <input type="password"
+                        {...register("password", { required: true, minLength: 6 })}
+                        className="input w-full" placeholder="Password" />
 
-                <p className="text-center mt-4 text-sm">
-                    Already have an account?{" "}
-                    <a href="/login" className="text-primary hover:underline">
-                        Login
-                    </a>
-                </p>
-            </div>
+                    {errors.password?.type === "required" && (<p className='text-red-500'>Invalid password!</p>)}
+                    {errors.password?.type === "minLength" && (<p className='text-red-500'> Password must be 6 characters or longer!</p>)}
+
+                    {/* register button */}
+                    <button className="btn btn-primary text-white mt-4">Register</button>
+                </fieldset>
+                <p className='text-[#71717A] py-2'>Already have an account? <Link to="/login" className='text-primary '>Login</Link></p>
+            </form>
+            <SocialLogin></SocialLogin>
         </div>
     );
 };

@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import UseAuth from "../../../hooks/UseAuth";
+import SocialLogin from "./SocialLogin";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-base-100 shadow-md lg:p-16 p-5">
       <h2 className="text-3xl font-bold mb-6 text-center">Login</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -109,6 +110,7 @@ const Login = () => {
             Forgot Password?
           </Link>
         </p>
+        <SocialLogin></SocialLogin>
       </div>
     </div>
   );

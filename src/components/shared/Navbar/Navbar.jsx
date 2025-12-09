@@ -20,7 +20,16 @@ const Navbar = () => {
       <li><NavLink to="/orders">Orders</NavLink></li>
       <li><NavLink to="/wishlist">Wishlist</NavLink></li>
       <li><NavLink to="/settings">Settings</NavLink></li>
-      <li><NavLink to="/logout">Logout</NavLink></li>
+      {
+        user? 
+        <>
+        <button onClick={userLogOut} className="btn btn-primary text-white font-medium btn-sm ">Log Out</button>
+        </>
+        :
+        <>
+        <li><NavLink to="/login">Log In</NavLink></li>
+        </>
+      }
     </>
   );
 

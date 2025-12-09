@@ -6,12 +6,12 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDUf2TAF7B5VfcxgiNNlAzpB38Tg2wM9pw",
-    authDomain: "vendosphere-6e51a.firebaseapp.com",
-    projectId: "vendosphere-6e51a",
-    storageBucket: "vendosphere-6e51a.firebasestorage.app",
-    messagingSenderId: "434207271282",
-    appId: "1:434207271282:web:9b795d3af752cec8f015eb"
+    apiKey: import.meta.env.VITE_apiKey,
+    authDomain: import.meta.env.VITE_authDomain,
+    projectId: import.meta.env.VITE_projectId,
+    storageBucket: import.meta.env.VITE_storageBucket,
+    messagingSenderId: import.meta.env.VITE_messagingSenderId,
+    appId: import.meta.env.VITE_appId
 };
 
 // Initialize Firebase
