@@ -53,7 +53,7 @@ const Navbar = () => {
       <li>
         <details>
           <summary>Profile</summary>
-          <ul className="p-2 bg-base-100 rounded-box w-48">
+          <ul className="p-2 bg-base-100 rounded-box w-48 z-10">
             {profileSubMenu}
           </ul>
         </details>

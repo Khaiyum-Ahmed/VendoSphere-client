@@ -50,7 +50,7 @@ const HeroSection = () => {
                                 initial={{ opacity: 0, y: 40 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.7 }}
-                                className="relative z-20 text-white max-w-lg px-6 md:px-12"
+                                className="relative z-0 text-white max-w-lg px-6 md:px-12"
                             >
                                 <h1 className="text-3xl md:text-5xl font-bold mb-4 drop-shadow-lg leading-tight">
                                     {slide.title}

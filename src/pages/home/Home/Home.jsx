@@ -1,4 +1,5 @@
 import UseAuth from "../../../hooks/UseAuth";
+import CategoriesSection from "./CategoriesSection/CategoriesSection";
 import HeroSection from "./HeroSection/HeroSection";
 
 const Home = () => {
@@ -7,6 +8,7 @@ const Home = () => {
     return (
         <div>
             <HeroSection></HeroSection>
+            <CategoriesSection></CategoriesSection>
         </div>
     );
 };
