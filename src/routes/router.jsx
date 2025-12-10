@@ -10,6 +10,8 @@ import Register from "../pages/AuthenticationPages/Register/Register";
 import BecomeSeller from "../pages/BecomeASeller/BecomeSeller";
 import PrivateRoutes from "./PrivateRoutes/PrivateRoutes";
 import Forbidden from "../pages/Forbidden/Forbidden";
+import DashBoardLayouts from "../components/layouts/DashBoardLayouts";
+import DashboardHome from "../pages/DashBoard/DashboardHome/DashboardHome";
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +53,18 @@ export const router = createBrowserRouter([
         path: 'register',
         Component:Register
       }
+    ]
+  },
+  {
+    path: '/dashboard',
+    element: <PrivateRoutes><DashBoardLayouts></DashBoardLayouts></PrivateRoutes>,
+    children:[
+      {
+        index:true,
+        Component: DashboardHome
+      },
+      // seller routes only
+      
     ]
   }
 ]);

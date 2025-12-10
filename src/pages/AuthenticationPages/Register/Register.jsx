@@ -84,7 +84,7 @@ const Register = () => {
 
                     {/* name field */}
                     <input type="text"
-                        {...register("name", { required: true, minLength: 6 })}
+                        {...register("name", { required: true, minLength: 4 })}
                         className="input w-full" placeholder="Your Name" />
                     {errors.name?.type === "required" && (<p className='text-red-500'>Name is required?</p>)}
                     {errors.name?.type === "minLength" && (<p className='text-red-500'>Name must be 4 characters or longer!</p>)}
