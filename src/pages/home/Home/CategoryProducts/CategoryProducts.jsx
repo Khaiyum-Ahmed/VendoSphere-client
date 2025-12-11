@@ -5,36 +5,38 @@ import UseAxios from "../../../../hooks/UseAxios";
 const CategoryProducts = () => {
     const axiosInstance = UseAxios();
     const [searchParams] = useSearchParams();
-    const categorySlug = searchParams.get("category");  // e.g. mobiles
+    const categorySlug = searchParams.get("category"); // e.g. "electronics"
 
-    // Convert slug → category name ("mobiles" → "Mobiles")
-    const categoryName = categorySlug
-        ? categorySlug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())
-        : "";
+    // Normalize slug → lowercase category
+    const categoryKey = categorySlug?.replace(/-/g, " ").toLowerCase();
 
-    const { data: products = [], isLoading } = useQuery({
-        queryKey: ["category-products", categorySlug],
+    const { data: categories = [], isLoading } = useQuery({
+        queryKey: ["categories"],
         queryFn: async () => {
-            const res = await axiosInstance.get(
-                `/products?category=${categoryName}`
-            );
+            const res = await axiosInstance.get("/categories");
             return res.data;
         },
-        enabled: !!categorySlug, // run only if slug exists
+        enabled: !!categorySlug,
     });
 
-    if (!categorySlug) {
-        return <div className="text-center py-10">Select a category above 👆</div>;
-    }
+    
 
     if (isLoading) {
         return <div className="text-center py-10">Loading products...</div>;
     }
 
+    // Find specific category document
+    const categoryData = categories.find(
+        (cat) => cat.category.toLowerCase() === categoryKey
+    );
+
+    const products = categoryData?.products || [];
+
     return (
         <section className="py-10">
             <h2 className="text-xl font-bold mb-6">
-                Products in <span className="text-primary">{categoryName}</span>
+                Products in{" "}
+                <span className="text-primary capitalize">{categoryKey}</span>
             </h2>
 
             {products.length === 0 && (
@@ -49,13 +51,19 @@ const CategoryProducts = () => {
                         key={product._id}
                         className="border rounded-lg p-3 shadow hover:shadow-lg transition"
                     >
+                        {/* product image */}
                         <img
-                            src={product.image}
-                            alt={product.productName}
+                            src={product.images?.[0]}
+                            alt={product.name}
                             className="w-full h-40 object-cover rounded mb-2"
                         />
-                        <h3 className="font-semibold">{product.productName}</h3>
-                        <p className="text-gray-500 text-sm">{product.brand}</p>
+
+                        <h3 className="font-semibold">{product.name}</h3>
+
+                        <p className="text-gray-500 text-sm capitalize">
+                            {product.specifications?.brand}
+                        </p>
+
                         <p className="font-bold text-primary">${product.price}</p>
                     </div>
                 ))}

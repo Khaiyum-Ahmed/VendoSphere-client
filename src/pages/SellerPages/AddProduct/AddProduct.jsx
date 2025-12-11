@@ -4,84 +4,90 @@ import UseAuth from "../../../hooks/UseAuth";
 import UseAxiosSecure from "../../../hooks/UseAxiosSecure";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 
 const AddProduct = () => {
     const { user } = UseAuth();
     const axiosSecure = UseAxiosSecure();
+    const queryClient = useQueryClient();
+    const [flashSaleEnabled, setFlashSaleEnabled] = useState(false);
+
     const {
         register,
         handleSubmit,
         reset,
         formState: { errors },
     } = useForm();
-    
-// inside AddProduct
-const queryClient = useQueryClient();
 
-const mutation = useMutation({
-    mutationFn: async (productData) => {
-        const res = await axiosSecure.post("/add-product", productData);
-        return res.data;
-    },
-    onSuccess: () => {
-        // Refetch categories so UI updates
-        queryClient.invalidateQueries(["categories"]);
-    }
-});
+    const mutation = useMutation({
+        mutationFn: async (productData) => {
+            const res = await axiosSecure.post("/add-product", productData);
+            return res.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(["products"]);
+        }
+    });
 
-    // const imgbbKey = import.meta.env.VITE_image_upload_key;
+    const uploadImageToIMGBB = async (file) => {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const res = await axios.post(
+            `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_upload_key}`,
+            formData
+        );
+        return res.data.data.url;
+    };
 
     const onSubmit = async (data) => {
         try {
-            // 1. Upload Image to imgbb
-            // const imageFile = { image: data.image[0] };
-            const formData = new FormData();
-            formData.append("image", data.image[0]);
-            const imgRes = await axios.post(
-                `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_upload_key}`,
-                formData
-            );
-            // const imgRes = await axiosSecure.post(
-            //     `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_upload_key}`,
-            //     formData,
-            //     // { headers: { "Content-Type": "multipart/form-data" } }
-            // );
+            // Upload Multiple Images
+            const imageFiles = data.images;
+            const uploadedImages = [];
 
-            const imageUrl = imgRes.data.data.url;
+            for (let img of imageFiles) {
+                const uploadedUrl = await uploadImageToIMGBB(img);
+                uploadedImages.push(uploadedUrl);
+            }
 
-            // 2. Prepare product data
+            // Create product data based on your new schema
             const productData = {
+                name: data.name,
+                category: data.category,
+                subcategory: data.subcategory,
+                description: data.description,
+                specifications: {
+                    brand: data.brand,
+                    model: data.model,
+                    color: data.color
+                },
+                images: uploadedImages,
+                price: parseFloat(data.price),
+                discount: parseFloat(data.discount) || 0,
+                stock: parseInt(data.stock),
+                isFlashSale: flashSaleEnabled,
+                flashSaleExpire: flashSaleEnabled ? data.flashSaleExpire : null,
                 sellerName: user.displayName,
                 sellerEmail: user.email,
-                productName: data.productName,
-                brand: data.brand,
-                model: data.model,
-                rating: parseFloat(data.rating),
-                category: data.category,
-                price: parseFloat(data.price),
-                stock: parseInt(data.stock),
-                description: data.description,
-                image: imageUrl,
-                createdAt: new Date(),
+                createdAt: new Date()
             };
 
-
-            // 3. Save to database
-            const res = await axiosSecure.post("/add-product", productData);
             mutation.mutate(productData);
 
-            if (res.data.insertedId) {
-                Swal.fire({
-                    icon: "success",
-                    title: "Product Added Successfully",
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                reset();
-            }
+            Swal.fire({
+                icon: "success",
+                title: "Product Added Successfully!",
+                timer: 1500,
+                showConfirmButton: false
+            });
+
+            reset();
+            setFlashSaleEnabled(false);
+
         } catch (error) {
             console.error(error);
-            Swal.fire("Error", "Something went wrong!", "error");
+            Swal.fire("Error", "Failed to add product", "error");
         }
     };
 
@@ -97,116 +103,44 @@ const mutation = useMutation({
                     <input
                         type="text"
                         className="input input-bordered w-full"
-                        {...register("productName", { required: true })}
+                        placeholder="Product Name..."
+                        {...register("name", { required: true })}
                     />
-                    {errors.productName && (
-                        <p className="text-red-500">Product name is required</p>
-                    )}
+                    {errors.name && <p className="text-red-500">Required</p>}
                 </div>
-
-                {/* Brand */}
-                <div>
-                    <label className="font-medium">Brand</label>
-                    <input
-                        type="text"
-                        className="input input-bordered w-full"
-                        {...register("brand", { required: true })}
-                    />
-                    {errors.brand && (
-                        <p className="text-red-500">Brand is required</p>
-                    )}
-                </div>
-
-                {/* Model */}
-                <div>
-                    <label className="font-medium">Model</label>
-                    <input
-                        type="text"
-                        className="input input-bordered w-full"
-                        {...register("model", { required: true })}
-                    />
-                    {errors.model && (
-                        <p className="text-red-500">Model is required</p>
-                    )}
-                </div>
-
-                {/* Rating */}
-                <div>
-                    <label className="font-medium">Rating (1 - 5)</label>
-                    <input
-                        type="number"
-                        min="1"
-                        max="5"
-                        step="0.1"
-                        className="input input-bordered w-full"
-                        {...register("rating", { required: true })}
-                    />
-                    {errors.rating && (
-                        <p className="text-red-500">Rating is required</p>
-                    )}
-                </div>
-
 
                 {/* Category */}
                 <div>
                     <label className="font-medium">Category</label>
-                    <select
-                        className="select select-bordered w-full"
+                    <input
+                        type="text"
+                        placeholder="Product Categories..."
+                        className="input input-bordered w-full"
                         {...register("category", { required: true })}
-                    >
-                        <option value="">Select Category</option>
-                        <option>Electronics</option>
-                        <option>Fashion</option>
-                        <option>Mobiles</option>
-                        <option>Beauty</option>
-                        <option>Accessories</option>
-                        <option>Shoes</option>
-                        <option>Bags</option>
-                        <option>Toys</option>
-                        <option>Pet & Supplies</option>
-                    </select>
-                    {errors.category && (
-                        <p className="text-red-500">Category is required</p>
-                    )}
+                    />
                 </div>
 
-                {/* Price */}
+                {/* Sub Category */}
                 <div>
-                    <label className="font-medium">Price ($)</label>
+                    <label className="font-medium">Subcategory</label>
                     <input
-                        type="number"
+                        type="text"
+                        placeholder="SubCategories..."
                         className="input input-bordered w-full"
-                        {...register("price", { required: true })}
+                        {...register("subcategory", { required: true })}
                     />
-                    {errors.price && (
-                        <p className="text-red-500">Price is required</p>
-                    )}
                 </div>
 
-                {/* Stock */}
-                <div>
-                    <label className="font-medium">Stock Quantity</label>
-                    <input
-                        type="number"
-                        className="input input-bordered w-full"
-                        {...register("stock", { required: true })}
-                    />
-                    {errors.stock && (
-                        <p className="text-red-500">Stock is required</p>
-                    )}
-                </div>
+                {/* Specifications */}
+                <h3 className="text-xl font-semibold mt-5">Specifications</h3>
 
-                {/* Image */}
-                <div>
-                    <label className="font-medium">Product Image</label>
-                    <input
-                        type="file"
-                        className="file-input file-input-bordered w-full"
-                        {...register("image", { required: true })}
-                    />
-                    {errors.image && (
-                        <p className="text-red-500">Product image is required</p>
-                    )}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input placeholder="Brand" className="input input-bordered w-full"
+                        {...register("brand")} />
+                    <input placeholder="Model" className="input input-bordered w-full"
+                        {...register("model")} />
+                    <input placeholder="Color" className="input input-bordered w-full"
+                        {...register("color")} />
                 </div>
 
                 {/* Description */}
@@ -217,10 +151,71 @@ const mutation = useMutation({
                         rows="4"
                         {...register("description", { required: true })}
                     ></textarea>
-                    {errors.description && (
-                        <p className="text-red-500">Description is required</p>
-                    )}
                 </div>
+
+                {/* Multiple Images */}
+                <div>
+                    <label className="font-medium">Product Images (Max 3)</label>
+                    <input
+                        type="file"
+                        multiple
+                        className="file-input file-input-bordered w-full"
+                        {...register("images", { required: true })}
+                    />
+                </div>
+
+                {/* Price */}
+                <div>
+                    <label className="font-medium">Price ($)</label>
+                    <input
+                        type="number"
+                        className="input input-bordered w-full"
+                        {...register("price", { required: true })}
+                    />
+                </div>
+
+                {/* Discount */}
+                <div>
+                    <label className="font-medium">Discount (%)</label>
+                    <input
+                        type="number"
+                        className="input input-bordered w-full"
+                        {...register("discount")}
+                    />
+                </div>
+
+                {/* Stock */}
+                <div>
+                    <label className="font-medium">Stock Quantity</label>
+                    <input
+                        type="number"
+                        className="input input-bordered w-full"
+                        {...register("stock", { required: true })}
+                    />
+                </div>
+
+                {/* Flash Sale Toggle */}
+                <div className="flex items-center gap-3">
+                    <input
+                        type="checkbox"
+                        className="toggle toggle-primary"
+                        checked={flashSaleEnabled}
+                        onChange={() => setFlashSaleEnabled(!flashSaleEnabled)}
+                    />
+                    <span className="font-medium">Enable Flash Sale?</span>
+                </div>
+
+                {/* Flash Sale Expire */}
+                {flashSaleEnabled && (
+                    <div>
+                        <label className="font-medium">Flash Sale Expire Date</label>
+                        <input
+                            type="datetime-local"
+                            className="input input-bordered w-full"
+                            {...register("flashSaleExpire", { required: true })}
+                        />
+                    </div>
+                )}
 
                 <button className="btn btn-primary w-full text-white" type="submit">
                     Add Product
