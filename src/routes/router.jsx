@@ -14,6 +14,7 @@ import DashBoardLayouts from "../components/layouts/DashBoardLayouts";
 import DashboardHome from "../pages/DashBoard/DashboardHome/DashboardHome";
 import SellerRoute from "./SellerRoutes/SellerRoute";
 import AddProduct from "../pages/SellerPages/AddProduct/AddProduct";
+import ShopPage from "../pages/shop/ShopPage/ShopPage";
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
         {
           path:'contact',
           Component:ContactUs
+        },
+        {
+          path:'shop',
+          Component:ShopPage
         },
         {
           path:'become-seller',

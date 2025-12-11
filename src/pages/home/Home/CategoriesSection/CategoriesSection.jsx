@@ -1,7 +1,7 @@
 import { FiCpu, FiShoppingBag, FiPhone, FiHeart } from "react-icons/fi";
 import { Link } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import UseAxiosSecure from "../../../../hooks/UseAxiosSecure";
+import UseAxios from "../../../../hooks/UseAxios";
 
 // Map category names to icons
 const categoryIcons = {
@@ -17,13 +17,13 @@ const categoryIcons = {
 };
 
 const CategoriesSection = () => {
-    const axiosPublic = UseAxiosSecure();
+    const axiosInstance = UseAxios();
 
     // Fetch all products
     const { data: products = [], isLoading } = useQuery({
         queryKey: ["products"],
         queryFn: async () => {
-            const res = await axiosPublic.get("/products");
+            const res = await axiosInstance.get("/products")
             return res.data;
         },
     });
@@ -46,7 +46,7 @@ const CategoriesSection = () => {
     return (
         <section className="w-full px-4 md:px-8 lg:px-16 py-10">
             <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
-                Shop by category
+                Shop by category {categories.length}
             </h2>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
