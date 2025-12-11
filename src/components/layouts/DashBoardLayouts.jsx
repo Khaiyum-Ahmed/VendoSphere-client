@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router";
-import { FaBoxOpen, FaCheckCircle, FaHeart, FaHome, FaMoneyBillWave, FaMotorcycle, FaRoute, FaShoppingBag, FaSignOutAlt, FaTasks, FaUser, FaUserCheck, FaUserClock, FaUserEdit, FaUserShield, FaWallet } from "react-icons/fa";
+import { FaBoxes, FaBoxOpen, FaChartLine, FaCheckCircle, FaClipboardList, FaDollarSign, FaEdit, FaHeart, FaHome, FaList, FaMoneyBillWave, FaMotorcycle, FaPlusCircle, FaRoute, FaShoppingBag, FaSignOutAlt, FaStore, FaTasks, FaUser, FaUserCheck, FaUserClock, FaUserEdit, FaUsersCog, FaUserShield, FaWallet } from "react-icons/fa";
 import VendoSphereLogo from "../shared/Logo/VendoSphereLogo";
 import UseUserRole from "../../hooks/UseUserRole";
 import UseAuth from "../../hooks/UseAuth";
@@ -55,19 +55,19 @@ const DashBoardLayouts = () => {
 
                     {!roleLoading && role === 'customer' && <>
                         <li>
-                            <NavLink to="/dashboard/customer/orders" className="flex items-center gap-3">
+                            <NavLink to="/dashboard/orders" className="flex items-center gap-3">
                                 <FaShoppingBag className="text-xl" /> My Orders
                             </NavLink>
                         </li>
 
                         <li>
-                            <NavLink to="/dashboard/customer/wishlist" className="flex items-center gap-3">
+                            <NavLink to="/dashboard/wishlist" className="flex items-center gap-3">
                                 <FaHeart className="text-xl" /> Wishlist
                             </NavLink>
                         </li>
 
                         <li>
-                            <NavLink to="/dashboard/customer/profile" className="flex items-center gap-3">
+                            <NavLink to="/dashboard/profile" className="flex items-center gap-3">
                                 <FaUser className="text-xl" /> My Profile
                             </NavLink>
                         </li>
@@ -78,24 +78,61 @@ const DashBoardLayouts = () => {
                     {/* sellers link */}
 
                     {!roleLoading && role === 'seller' && <>
+
                         <li>
-                            <NavLink to="/dashboard/pending-deliveries">
-                                <FaTasks className="inline-block mr-2" />
-                                Pending Deliveries
+                            <NavLink
+                                to="/dashboard/products"
+                                className="flex items-center gap-3"
+                            >
+                                <FaBoxOpen className="text-xl" /> My Products
                             </NavLink>
                         </li>
+
                         <li>
-                            <NavLink to="/dashboard/completed-deliveries">
-                                <FaCheckCircle className="inline-block mr-2" />
-                                Completed Deliveries
+                            <NavLink
+                                to="/dashboard/add-product"
+                                className="flex items-center gap-3"
+                            >
+                                <FaPlusCircle className="text-xl" /> Add Product
                             </NavLink>
                         </li>
+
                         <li>
-                            <NavLink to="/dashboard/my-earnings">
-                                <FaWallet className="inline-block mr-2" />
-                                My Earnings
+                            <NavLink
+                                to="/dashboard/manage-products"
+                                className="flex items-center gap-3"
+                            >
+                                <FaEdit className="text-xl" /> Manage Products
                             </NavLink>
                         </li>
+
+                        <li>
+                            <NavLink
+                                to="/dashboard/orders"
+                                className="flex items-center gap-3"
+                            >
+                                <FaClipboardList className="text-xl" /> Orders Received
+                            </NavLink>
+                        </li>
+
+                        <li>
+                            <NavLink
+                                to="/dashboard/earnings"
+                                className="flex items-center gap-3"
+                            >
+                                <FaDollarSign className="text-xl" /> Earnings
+                            </NavLink>
+                        </li>
+
+                        <li>
+                            <NavLink
+                                to="/dashboard/sales-report"
+                                className="flex items-center gap-3"
+                            >
+                                <FaChartLine className="text-xl" /> Sales Report
+                            </NavLink>
+                        </li>
+
 
                     </>}
 
@@ -105,29 +142,68 @@ const DashBoardLayouts = () => {
                         !roleLoading && role === 'admin' &&
                         <>
                             <li>
-                                <NavLink to="/dashboard/assign-rider">
-                                    <FaMotorcycle className="inline-block mr-2" />
-                                    Assign Rider
+                                <NavLink
+                                    to="/dashboard/manage-users"
+                                    className="flex items-center gap-3"
+                                >
+                                    <FaUsersCog className="text-xl" /> Manage Users
                                 </NavLink>
                             </li>
+
                             <li>
-                                <NavLink to="/dashboard/active-riders">
-                                    <FaUserCheck className="inline-block mr-2" />
-                                    Active Riders
+                                <NavLink
+                                    to="/dashboard/manage-sellers"
+                                    className="flex items-center gap-3"
+                                >
+                                    <FaUserShield className="text-xl" /> Manage Sellers
                                 </NavLink>
                             </li>
+
                             <li>
-                                <NavLink to="/dashboard/pending-riders">
-                                    <FaUserClock className="inline-block mr-2" />
-                                    Pending Riders
+                                <NavLink
+                                    to="/dashboard/manage-products"
+                                    className="flex items-center gap-3"
+                                >
+                                    <FaBoxes className="text-xl" /> Manage Products
                                 </NavLink>
                             </li>
+
                             <li>
-                                <NavLink to="/dashboard/make-admin">
-                                    <FaUserShield className="inline-block mr-2" />
-                                    Make Admin
+                                <NavLink
+                                    to="/dashboard/manage-orders"
+                                    className="flex items-center gap-3"
+                                >
+                                    <FaClipboardList className="text-xl" /> Manage Orders
                                 </NavLink>
                             </li>
+
+                            <li>
+                                <NavLink
+                                    to="/dashboard/manage-categories"
+                                    className="flex items-center gap-3"
+                                >
+                                    <FaList className="text-xl" /> Manage Categories
+                                </NavLink>
+                            </li>
+
+                            <li>
+                                <NavLink
+                                    to="/dashboard/withdraw-requests"
+                                    className="flex items-center gap-3"
+                                >
+                                    <FaStore className="text-xl" /> Withdraw Requests
+                                </NavLink>
+                            </li>
+
+                            <li>
+                                <NavLink
+                                    to="/dashboard/profile"
+                                    className="flex items-center gap-3"
+                                >
+                                    <FaUserShield className="text-xl" /> Admin Profile
+                                </NavLink>
+                            </li>
+
                         </>
                     }
                     <li>

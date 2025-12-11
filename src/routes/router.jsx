@@ -12,6 +12,8 @@ import PrivateRoutes from "./PrivateRoutes/PrivateRoutes";
 import Forbidden from "../pages/Forbidden/Forbidden";
 import DashBoardLayouts from "../components/layouts/DashBoardLayouts";
 import DashboardHome from "../pages/DashBoard/DashboardHome/DashboardHome";
+import SellerRoute from "./SellerRoutes/SellerRoute";
+import AddProduct from "../pages/SellerPages/AddProduct/AddProduct";
 
 export const router = createBrowserRouter([
   {
@@ -64,7 +66,10 @@ export const router = createBrowserRouter([
         Component: DashboardHome
       },
       // seller routes only
-      
+      {
+        path: 'add-product',
+        element: <SellerRoute><AddProduct></AddProduct></SellerRoute>
+      },
     ]
   }
 ]);
