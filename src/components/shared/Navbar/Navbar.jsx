@@ -29,17 +29,17 @@ const Navbar = () => {
 
   /* ================= PROFILE MENU ================= */
   const profileMenu = (
-    <ul className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 `z-[50]`">
+    <ul className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 `z-[100]`">
 
       {/* ===== Logged In ===== */}
       {user && !roleLoading && (
         <>
           {role === "admin" && (
-            <li><NavLink to="/dashboard">Admin Panel</NavLink></li>
+            <li><NavLink to="/dashboard/admin">Admin Panel</NavLink></li>
           )}
 
           {role === "seller" && (
-            <li><NavLink to="/dashboard">Seller Dashboard</NavLink></li>
+            <li><NavLink to="/dashboard/seller">Seller Dashboard</NavLink></li>
           )}
 
           {role === "customer" && (
@@ -53,7 +53,7 @@ const Navbar = () => {
           <li>
             <button
               onClick={handleLogout}
-              className="btn btn-sm btn-primary text-white mt-1"
+              className="btn btn-sm btn-primary text-white mt-1 w-full"
             >
               Logout
             </button>
@@ -72,20 +72,32 @@ const Navbar = () => {
   );
 
   return (
-    <div className="navbar bg-base-100 sticky top-0 z-50 shadow-md">
+    <div className=" mb-24">
+      <div className="navbar bg-base-100 fixed top-0 left-0 w-full z-50 shadow-md">
 
       {/* ================= LEFT ================= */}
       <div className="navbar-start">
+        {/* Mobile Menu */}
         <div className="dropdown lg:hidden">
           <label tabIndex={0} className="btn btn-ghost">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h8m-8 6h16" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 6h16M4 12h8m-8 6h16"
+              />
             </svg>
           </label>
 
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 z-[40]"
+            className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 `z-[40]`"
           >
             {navLinks}
           </ul>
@@ -104,24 +116,17 @@ const Navbar = () => {
       {/* ================= RIGHT ================= */}
       <div className="navbar-end gap-4">
 
-        {/* Cart → only logged-in customers
-        {user && role === "customer" && (
-          <NavLink to="/cart" className="relative">
-            <FiShoppingCart size={24} />
-            {cartCount > 0 && (
-              <span className="badge badge-primary badge-sm absolute -top-2 -right-2">
-                {cartCount}
-              </span>
-            )}
-          </NavLink>
-        )} */}
-        {/* Cart */} 
-        <NavLink to="/cart" className="relative"> 
-        <FiShoppingCart size={24} /> 
-        {cartCount > 0 && (<span className="badge badge-primary badge-sm absolute -top-2 -right-2"> {cartCount} </span>)} 
+        {/* Cart */}
+        <NavLink to="/cart" className="relative">
+          <FiShoppingCart size={24} />
+          {cartCount > 0 && (
+            <span className="badge badge-primary badge-sm absolute -top-2 -right-2">
+              {cartCount}
+            </span>
+          )}
         </NavLink>
 
-        {/* Profile Dropdown */}
+        {/* Profile */}
         <div className="dropdown dropdown-end">
           <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
             {user?.photoURL ? (
@@ -137,6 +142,7 @@ const Navbar = () => {
           {profileMenu}
         </div>
       </div>
+    </div>
     </div>
   );
 };

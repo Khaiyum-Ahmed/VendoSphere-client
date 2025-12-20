@@ -15,6 +15,7 @@ import DashboardHome from "../pages/DashBoard/DashboardHome/DashboardHome";
 import SellerRoute from "./SellerRoutes/SellerRoute";
 import AddProduct from "../pages/SellerPages/AddProduct/AddProduct";
 import ShopPage from "../pages/shop/ShopPage/ShopPage";
+import ProductDetails from "../pages/home/Home/FeaturedProduct/ProductDetails/ProductDetails";
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
           path:'shop',
           Component:ShopPage
         },
+         {
+        path: "product/:id", // ✅ PRODUCT DETAILS ROUTE
+        Component: ProductDetails
+      },
         {
           path:'become-seller',
           element: <PrivateRoutes><BecomeSeller></BecomeSeller></PrivateRoutes>
