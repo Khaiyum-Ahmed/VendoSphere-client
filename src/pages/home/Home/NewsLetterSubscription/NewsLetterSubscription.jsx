@@ -60,7 +60,7 @@ const NewsletterSubscription = () => {
     };
 
     return (
-        <section className="bg-base-200 py-16 px-4">
+        <section className="bg-base-200 py-16 px-4 mb-24">
             <div className="max-w-3xl mx-auto text-center">
                 <h2 className="text-3xl font-bold mb-3">📬 Stay Updated!</h2>
                 <p className="text-base-content/70 mb-6">
