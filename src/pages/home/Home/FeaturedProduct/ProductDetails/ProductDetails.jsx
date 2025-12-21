@@ -32,10 +32,25 @@ const ProductDetails = () => {
     return (
         <div className="max-w-7xl mx-auto px-4 py-10 space-y-16">
             {/* Top Section */}
-            <div className="grid lg:grid-cols-2 gap-10">
-             <ProductGallery images={galleryImages} />
+
+            {/* <div className="grid lg:grid-cols-2 gap-10">
+                <ProductGallery images={galleryImages} />
                 <ProductSummary product={product} />
+            </div> */}
+
+
+            <div className="relative flex gap-10">
+                {/* LEFT */}
+                <ProductGallery images={galleryImages} />
+
+                {/* RIGHT */}
+                <div className="flex-1 relative z-10">
+                    {/* Product summary content */}
+                    <ProductSummary product={product} />
+                </div>
             </div>
+
+
 
             {/* Tabs */}
             <ProductTabs product={product} />

@@ -69,21 +69,24 @@ const FlashSale = () => {
             >
                 {products.map((product) => (
                     <SwiperSlide key={product._id}>
-                        <Link to={`/product/${product._id}`} className="block bg-white rounded shadow hover:shadow-lg transition overflow-hidden">
+                        <Link to={`/product/${product._id}`} className="block bg-white rounded shadow hover:shadow-lg transition overflow-hidden my-2">
                             <img
                                 src={product.images}
                                 alt={product.productName}
                                 className="w-full h-36 object-cover"
                             />
                             <div className="p-2 text-center">
-                                <p className="text-sm font-medium">{product.productName}</p>
+                                <p className="text-lg font-medium">{product.name}</p>
                                 <p className="text-red-500 font-bold">
                                     $ {product.price - (product.discount || 0)}
+                                </p>
+                                <p>
                                     {product.discount > 0 && (
                                         <span className="line-through text-gray-400 ml-2">
                                             $ {product.price}
                                         </span>
                                     )}
+                                    <span>- {product.discount}%</span>
                                 </p>
                             </div>
                         </Link>
@@ -91,7 +94,7 @@ const FlashSale = () => {
                 ))}
             </Swiper>
 
-            <div className="mt-4 text-right">
+            <div className="mt-6 text-right">
                 <Link to="/shop?flash=true" className="btn btn-outline">
                     See All Deals
                 </Link>
