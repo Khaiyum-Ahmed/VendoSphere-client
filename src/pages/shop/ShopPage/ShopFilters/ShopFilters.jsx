@@ -5,9 +5,10 @@ const ShopFilters = () => {
     const [params, setParams] = useSearchParams();
 
     const updateParam = (key, value) => {
-        if (value) params.set(key, value);
-        else params.delete(key);
-        setParams(params);
+        const newParams = new URLSearchParams(params.toString());
+        if (value) newParams.set(key, value);
+        else newParams.delete(key);
+        setParams(newParams);
     };
 
     return (

@@ -8,6 +8,7 @@ import Pagination from "./Pagination/Pagination";
 import ShopSortBar from "./ShopSortBar/ShopSortBar";
 import CategoryProducts from "../../home/Home/CategoryProducts/CategoryProducts";
 import CategoriesSection from "../../home/Home/CategoriesSection/CategoriesSection";
+import CategoriesShopSection from "./CategoriesShopSection/CategoriesShopSection";
 
 const ShopPage = () => {
     const axiosInstance = UseAxios();
@@ -27,15 +28,28 @@ const ShopPage = () => {
 
     return (
         <div className="max-w-11/12 mx-auto">
-            <div className="px-4 md:px-8 lg:px-16 py-10">
+            {/* <div className="px-4 md:px-8 lg:px-16 py-10">
                 <CategoriesSection></CategoriesSection>
                 <CategoryProducts></CategoryProducts>
+            </div> */}
+
+            <div className=" px-4 py-8 grid grid-cols-12 gap-6">
+                <div className="col-span-12 md:col-span-3">
+                    {/* <CategoriesSection></CategoriesSection> */}
+                    <CategoriesShopSection></CategoriesShopSection>
+
+                </div>
+                <div className="col-span-12 md:col-span-9 space-y-6">
+                    <CategoryProducts></CategoryProducts>
+                </div>
             </div>
+
             <div className=" px-4 py-8 grid grid-cols-12 gap-6">
 
                 {/* Filters */}
                 <div className="col-span-12 md:col-span-3">
                     <ShopFilters />
+
                 </div>
 
                 {/* Products */}
