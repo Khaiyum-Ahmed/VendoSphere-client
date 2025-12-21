@@ -6,6 +6,13 @@ const ProductSummary = ({ product }) => {
     const [quantity, setQuantity] = useState(1);
     const { addToCart } = UseCart();
     const stock = product.stock ?? 1;
+    const handleAddToCart = () => {
+        addToCart({
+            ...product,
+            quantity,
+        });
+    };
+
     // console.log(product)
 
 
@@ -40,7 +47,7 @@ const ProductSummary = ({ product }) => {
             {/* Actions */}
             <div className="flex gap-4">
                 <button
-                    onClick={() => addToCart(product)}
+                    onClick={handleAddToCart}
                     className="btn btn-primary text-white"
                 >
                     Add to Cart

@@ -13,6 +13,7 @@ const ProductDetails = () => {
     // console.log(id)
     const axiosInstance = UseAxios();
 
+
     const { data: product = {}, isLoading } = useQuery({
         queryKey: ["product-details", id],
         queryFn: async () => {
@@ -22,20 +23,17 @@ const ProductDetails = () => {
     });
 
     if (isLoading) return <Loading></Loading>;
+    const galleryImages = Array.isArray(product.images)
+        ? product.images
+        : product.images
+            ? [product.images]
+            : [];
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-10 space-y-16">
             {/* Top Section */}
             <div className="grid lg:grid-cols-2 gap-10">
-                <ProductGallery
-                    images={
-                        Array.isArray(product.images)
-                            ? product.images
-                            : product.image
-                                ? [product.image]
-                                : []
-                    }
-                />
+             <ProductGallery images={galleryImages} />
                 <ProductSummary product={product} />
             </div>
 
