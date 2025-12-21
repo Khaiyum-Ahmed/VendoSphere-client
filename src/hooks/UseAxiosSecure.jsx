@@ -1,43 +1,55 @@
 import axios from "axios";
-import UseAuth from "./UseAuth";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import UseAuth from "./UseAuth";
+import { getAuth } from "firebase/auth";
 
 const axiosSecure = axios.create({
-    // baseURL: `https://profast-parcel-server.vercel.app`
-    baseURL:`http://localhost:5000`
+    baseURL: "http://localhost:5000",
 });
 
-
 const UseAxiosSecure = () => {
-    const { user, logOutUser } = UseAuth();
+    const { logOutUser } = UseAuth();
     const navigate = useNavigate();
+    const auth = getAuth();
 
-    axiosSecure.interceptors.request.use(config => {
-        config.headers.Authorization = `Bearer ${user.accessToken}`
-        return config;
-    }, error => {
-        // Do something with request error
-        return Promise.reject(error);
-    });
+    useEffect(() => {
+        // REQUEST interceptor
+        const reqInterceptor = axiosSecure.interceptors.request.use(
+            async (config) => {
+                const currentUser = auth.currentUser;
 
-    axiosSecure.interceptors.response.use(res => {
-        return res;
-    }, error => {
-        const status = error.status;
-        if (status === 403) {
-            navigate('/forbidden')
-        }
-        else if (status === 401) {
-            logOutUser()
-                .then(() => {
-                    navigate('/login')
-                })
-                .catch(() => { })
-        }
-        return Promise.reject(error);
-    }
-    )
+                if (currentUser) {
+                    const token = await currentUser.getIdToken(true);
+                    config.headers.Authorization = `Bearer ${token}`;
+                }
 
+                return config;
+            },
+            (error) => Promise.reject(error)
+        );
+
+        // RESPONSE interceptor
+        const resInterceptor = axiosSecure.interceptors.response.use(
+            (res) => res,
+            async (error) => {
+                const status = error.response?.status;
+
+                if (status === 401 || status === 403) {
+                    await logOutUser();
+                    navigate("/login");
+                }
+
+                return Promise.reject(error);
+            }
+        );
+
+        // CLEANUP (VERY IMPORTANT)
+        return () => {
+            axiosSecure.interceptors.request.eject(reqInterceptor);
+            axiosSecure.interceptors.response.eject(resInterceptor);
+        };
+    }, [auth, logOutUser, navigate]);
 
     return axiosSecure;
 };

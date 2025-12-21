@@ -20,7 +20,7 @@ const UseUserRole = () => {
      staleTime: 5 * 60 * 1000, // cache for 5 minutes
     });
     return {role: role || "customer",
-         loading: authLoading || roleLoading, refetch,}
+         roleLoading: authLoading || roleLoading, refetch,}
 };
 
 export default UseUserRole;

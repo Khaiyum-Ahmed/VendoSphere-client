@@ -1,7 +1,7 @@
 import UseAuth from "../../../hooks/UseAuth";
 import UseUserRole from "../../../hooks/UseUserRole";
 
-const RiderDashboard = () => {
+const SellerDashboard = () => {
     const { user } = UseAuth();
     const {role} = UseUserRole();
     console.log(user.email, role)
@@ -15,4 +15,4 @@ const RiderDashboard = () => {
     );
 };
 
-export default RiderDashboard;
+export default SellerDashboard;

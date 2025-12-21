@@ -1,222 +1,134 @@
-import { NavLink, Outlet } from "react-router";
-import { FaBoxes, FaBoxOpen, FaChartLine, FaCheckCircle, FaClipboardList, FaDollarSign, FaEdit, FaHeart, FaHome, FaList, FaMoneyBillWave, FaMotorcycle, FaPlusCircle, FaRoute, FaShoppingBag, FaSignOutAlt, FaStore, FaTasks, FaUser, FaUserCheck, FaUserClock, FaUserEdit, FaUsersCog, FaUserShield, FaWallet } from "react-icons/fa";
+import { NavLink, Outlet, useNavigate } from "react-router";
+import {
+    FaBoxes,
+    FaBoxOpen,
+    FaChartLine,
+    FaClipboardList,
+    FaDollarSign,
+    FaEdit,
+    FaHeart,
+    FaHome,
+    FaList,
+    FaPlusCircle,
+    FaShoppingBag,
+    FaSignOutAlt,
+    FaStore,
+    FaUser,
+    FaUsersCog,
+    FaUserShield,
+} from "react-icons/fa";
 import VendoSphereLogo from "../shared/Logo/VendoSphereLogo";
 import UseUserRole from "../../hooks/UseUserRole";
 import UseAuth from "../../hooks/UseAuth";
 
 const DashBoardLayouts = () => {
+    const navigate = useNavigate();
     const { logOutUser } = UseAuth();
     const { role, roleLoading } = UseUserRole();
-    console.log(role)
+
+    const handleLogout = async () => {
+        await logOutUser();
+        navigate("/login");
+    };
+
+    if (roleLoading || !role) {
+        return (
+            <div className="h-screen flex items-center justify-center">
+                <span className="loading loading-spinner loading-lg"></span>
+            </div>
+        );
+    }
+console.log("USER ROLE:", role);
     return (
         <div className="drawer lg:drawer-open">
-            <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
-            <div className="drawer-content flex flex-col ">
+            <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
 
-                {/* Navbar */}
-                <div className="navbar bg-base-300 w-full lg:hidden">
-                    <div className="flex-none lg:hidden">
-                        <label htmlFor="my-drawer-3" aria-label="open sidebar" className="btn btn-square btn-ghost">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                className="inline-block h-6 w-6 stroke-current"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M4 6h16M4 12h16M4 18h16"
-                                ></path>
-                            </svg>
-                        </label>
-                    </div>
-                    <div className="mx-2 flex-1 px-2 lg:hidden">DashBoard</div>
+            {/* ================= CONTENT ================= */}
+            <div className="drawer-content flex flex-col">
+                {/* Mobile Navbar */}
+                <div className="navbar bg-base-200 lg:hidden">
+                    <label htmlFor="dashboard-drawer" className="btn btn-ghost btn-square">
+                        ☰
+                    </label>
+                    <span className="ml-2 font-semibold">Dashboard</span>
                 </div>
-                {/* Page content here */}
-                <Outlet></Outlet>
-                {/* Page content here */}
 
+                <div className="p-4">
+                    <Outlet />
+                </div>
             </div>
-            <div className="drawer-side">
-                <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
-                <ul className="menu bg-base-200 min-h-full w-80 p-4 space-y-4">
-                    {/* Sidebar content here */}
-                    <VendoSphereLogo></VendoSphereLogo>
 
-                    <li>
-                        <NavLink to="/dashboard" className="flex items-center gap-3">
-                            <FaHome className="text-xl" /> Home
+            {/* ================= SIDEBAR ================= */}
+            <div className="drawer-side z-50">
+                <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
+
+                <ul className="menu bg-base-200 min-h-full w-80 p-4 space-y-2">
+                    <VendoSphereLogo />
+
+                    {/* <li>
+                        <NavLink to="/dashboard">
+                            <FaHome /> Dashboard Home
                         </NavLink>
-                    </li>
+                    </li> */}
 
-                    {/* Customer link */}
-
-                    {!roleLoading && role === 'customer' && <>
-                        <li>
-                            <NavLink to="/dashboard/orders" className="flex items-center gap-3">
-                                <FaShoppingBag className="text-xl" /> My Orders
-                            </NavLink>
-                        </li>
-
-                        <li>
-                            <NavLink to="/dashboard/wishlist" className="flex items-center gap-3">
-                                <FaHeart className="text-xl" /> Wishlist
-                            </NavLink>
-                        </li>
-
-                        <li>
-                            <NavLink to="/dashboard/profile" className="flex items-center gap-3">
-                                <FaUser className="text-xl" /> My Profile
-                            </NavLink>
-                        </li>
-
-                    </>}
-
-
-                    {/* sellers link */}
-
-                    {!roleLoading && role === 'seller' && <>
-
-                        <li>
-                            <NavLink
-                                to="/dashboard/products"
-                                className="flex items-center gap-3"
-                            >
-                                <FaBoxOpen className="text-xl" /> My Products
-                            </NavLink>
-                        </li>
-
-                        <li>
-                            <NavLink
-                                to="/dashboard/add-product"
-                                className="flex items-center gap-3"
-                            >
-                                <FaPlusCircle className="text-xl" /> Add Product
-                            </NavLink>
-                        </li>
-
-                        <li>
-                            <NavLink
-                                to="/dashboard/manage-products"
-                                className="flex items-center gap-3"
-                            >
-                                <FaEdit className="text-xl" /> Manage Products
-                            </NavLink>
-                        </li>
-
-                        <li>
-                            <NavLink
-                                to="/dashboard/orders"
-                                className="flex items-center gap-3"
-                            >
-                                <FaClipboardList className="text-xl" /> Orders Received
-                            </NavLink>
-                        </li>
-
-                        <li>
-                            <NavLink
-                                to="/dashboard/earnings"
-                                className="flex items-center gap-3"
-                            >
-                                <FaDollarSign className="text-xl" /> Earnings
-                            </NavLink>
-                        </li>
-
-                        <li>
-                            <NavLink
-                                to="/dashboard/sales-report"
-                                className="flex items-center gap-3"
-                            >
-                                <FaChartLine className="text-xl" /> Sales Report
-                            </NavLink>
-                        </li>
-
-
-                    </>}
-
-                    {/* Admin link */}
-
-                    {
-                        !roleLoading && role === 'admin' &&
+                    {/* CUSTOMER */}
+                    {role === "customer" && (
                         <>
                             <li>
-                                <NavLink
-                                    to="/dashboard/manage-users"
-                                    className="flex items-center gap-3"
-                                >
-                                    <FaUsersCog className="text-xl" /> Manage Users
+                                <NavLink to="/dashboard/customer">
+                                    <FaHome /> Dashboard Home
                                 </NavLink>
                             </li>
-
-                            <li>
-                                <NavLink
-                                    to="/dashboard/manage-sellers"
-                                    className="flex items-center gap-3"
-                                >
-                                    <FaUserShield className="text-xl" /> Manage Sellers
-                                </NavLink>
-                            </li>
-
-                            <li>
-                                <NavLink
-                                    to="/dashboard/manage-products"
-                                    className="flex items-center gap-3"
-                                >
-                                    <FaBoxes className="text-xl" /> Manage Products
-                                </NavLink>
-                            </li>
-
-                            <li>
-                                <NavLink
-                                    to="/dashboard/manage-orders"
-                                    className="flex items-center gap-3"
-                                >
-                                    <FaClipboardList className="text-xl" /> Manage Orders
-                                </NavLink>
-                            </li>
-
-                            <li>
-                                <NavLink
-                                    to="/dashboard/manage-categories"
-                                    className="flex items-center gap-3"
-                                >
-                                    <FaList className="text-xl" /> Manage Categories
-                                </NavLink>
-                            </li>
-
-                            <li>
-                                <NavLink
-                                    to="/dashboard/withdraw-requests"
-                                    className="flex items-center gap-3"
-                                >
-                                    <FaStore className="text-xl" /> Withdraw Requests
-                                </NavLink>
-                            </li>
-
-                            <li>
-                                <NavLink
-                                    to="/dashboard/profile"
-                                    className="flex items-center gap-3"
-                                >
-                                    <FaUserShield className="text-xl" /> Admin Profile
-                                </NavLink>
-                            </li>
-
+                            <li><NavLink to="/dashboard/orders"><FaShoppingBag /> My Orders</NavLink></li>
+                            <li><NavLink to="/dashboard/wishlist"><FaHeart /> Wishlist</NavLink></li>
+                            <li><NavLink to="/dashboard/profile"><FaUser /> Profile</NavLink></li>
                         </>
-                    }
+                    )}
+
+                    {/* SELLER */}
+                    {role === "seller" && (
+                        <>
+                            <li>
+                                <NavLink to="/dashboard/seller">
+                                    <FaHome /> Dashboard Home
+                                </NavLink>
+                            </li>
+                            <li><NavLink to="/dashboard/seller/products"><FaBoxOpen /> My Products</NavLink></li>
+                            <li><NavLink to="/dashboard/seller/add-product"><FaPlusCircle /> Add Product</NavLink></li>
+                            <li><NavLink to="/dashboard/seller/manage-products"><FaEdit /> Manage Products</NavLink></li>
+                            <li><NavLink to="/dashboard/seller/orders"><FaClipboardList /> Orders</NavLink></li>
+                            <li><NavLink to="/dashboard/seller/earnings"><FaDollarSign /> Earnings</NavLink></li>
+                            <li><NavLink to="/dashboard/seller/sales-report"><FaChartLine /> Sales Report</NavLink></li>
+                        </>
+                    )}
+
+                    {/* ADMIN */}
+                    {role === "admin" && (
+                        <>
+                            <li>
+                                <NavLink to="/dashboard/admin">
+                                    <FaHome /> Dashboard Home
+                                </NavLink>
+                            </li>
+                            <li><NavLink to="/dashboard/admin/manage-users"><FaUsersCog /> Manage Users</NavLink></li>
+                            <li><NavLink to="/dashboard/manage-sellers"><FaUserShield /> Manage Sellers</NavLink></li>
+                            <li><NavLink to="/dashboard/manage-products"><FaBoxes /> Manage Products</NavLink></li>
+                            <li><NavLink to="/dashboard/manage-orders"><FaClipboardList /> Manage Orders</NavLink></li>
+                            <li><NavLink to="/dashboard/manage-categories"><FaList /> Categories</NavLink></li>
+                            <li><NavLink to="/dashboard/withdraw-requests"><FaStore /> Withdraw Requests</NavLink></li>
+                        </>
+                    )}
+
+                    <div className="divider"></div>
+
                     <li>
-                        <button
-                            onClick={logOutUser}
-                            className="flex items-center gap-3 text-red-500 hover:text-red-700"
-                        >
-                            <FaSignOutAlt className="text-xl" /> Logout
+                        <button onClick={handleLogout} className="text-red-500">
+                            <FaSignOutAlt /> Logout
                         </button>
                     </li>
                 </ul>
             </div>
-        </div >
+        </div>
     );
 };
 

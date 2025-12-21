@@ -11,7 +11,7 @@ const DashboardHome = () => {
     if (roleLoading) {
         return <Loading></Loading>
     }
-    if (role === 'customer') {
+    if (role === "customer") {
         return <CustomerDashboard></CustomerDashboard>
     }
     else if (role === "seller") {

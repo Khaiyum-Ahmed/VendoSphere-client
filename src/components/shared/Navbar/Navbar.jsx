@@ -8,7 +8,7 @@ import { UseCart } from "../../../context/CartContext";
 const Navbar = () => {
   const { user, logOutUser } = UseAuth();
   const { cart } = UseCart();
-  const { role, roleLoading } = UseUserRole();
+  const { role, roleLoading } = UseUserRole(null);
 
   const handleLogout = async () => {
     try {
@@ -17,6 +17,7 @@ const Navbar = () => {
       console.error(err);
     }
   };
+  console.log(role)
 
   /* ================= NAV LINKS ================= */
   const navLinks = (

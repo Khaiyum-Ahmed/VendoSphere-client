@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { FaShoppingBag, FaHeart, FaClock, FaCheckCircle } from "react-icons/fa";
 import UseAuth from "../../../hooks/UseAuth";
 import UseAxios from "../../../hooks/UseAxios";
+import Loading from "../../Loading/Loading";
 
 const CustomerDashboard = () => {
     const { user } = UseAuth();
@@ -30,7 +31,7 @@ const CustomerDashboard = () => {
     });
 
     if (isLoading) {
-        return <div className="text-center py-20">Loading dashboard...</div>;
+        return <Loading></Loading>;
     }
 
     return (
