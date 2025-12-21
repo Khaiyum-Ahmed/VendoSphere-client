@@ -4,7 +4,7 @@ import { UseCart } from "../../../../../context/CartContext";
 
 const FeaturedProductCard = ({ product }) => {
     const { addToCart } = UseCart();
-    console.log(product)
+    // console.log(product)
 
     return (
         <div className=" bg-base-200 rounded-lg p-3 shadow hover:shadow-lg transition">

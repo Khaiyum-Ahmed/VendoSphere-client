@@ -16,6 +16,7 @@ import SellerRoute from "./SellerRoutes/SellerRoute";
 import AddProduct from "../pages/SellerPages/AddProduct/AddProduct";
 import ShopPage from "../pages/shop/ShopPage/ShopPage";
 import ProductDetails from "../pages/home/Home/FeaturedProduct/ProductDetails/ProductDetails";
+import Cart from "../pages/Cart/Cart";
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
         {
           path:'shop',
           Component:ShopPage
+        },
+        {
+          path:'cart',
+          Component:Cart
         },
          {
         path: "product/:id", // ✅ PRODUCT DETAILS ROUTE
