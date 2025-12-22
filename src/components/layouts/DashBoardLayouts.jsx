@@ -9,11 +9,13 @@ import {
     FaHeart,
     FaHome,
     FaList,
+    FaPauseCircle,
     FaPlusCircle,
     FaShoppingBag,
     FaSignOutAlt,
     FaStore,
     FaUser,
+    FaUserCircle,
     FaUsersCog,
     FaUserShield,
 } from "react-icons/fa";
@@ -99,6 +101,7 @@ console.log("USER ROLE:", role);
                             <li><NavLink to="/dashboard/seller/orders"><FaClipboardList /> Orders</NavLink></li>
                             <li><NavLink to="/dashboard/seller/earnings"><FaDollarSign /> Earnings</NavLink></li>
                             <li><NavLink to="/dashboard/seller/sales-report"><FaChartLine /> Sales Report</NavLink></li>
+                            <li><NavLink to="/dashboard/seller/seller-profile"><FaUserCircle />Profile Management</NavLink></li>
                         </>
                     )}
 

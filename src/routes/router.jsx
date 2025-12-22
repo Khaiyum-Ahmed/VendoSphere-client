@@ -24,6 +24,11 @@ import SellerDashboard from "../pages/DashBoard/DashboardHomeRole/SellerDashboar
 import AdminRoute from "./AdminRoutes/AdminRoute";
 import AdminDashboarded from "../pages/DashBoard/DashboardHomeRole/AdminDashboard";
 import EditProduct from "../pages/SellerPages/EditProduct/EditProduct";
+import ManageProducts from "../pages/SellerPages/ManageProducts/ManageProducts";
+import SellerOrders from "../pages/SellerPages/SellerOrders/SellerOrders";
+import SellerEarnings from "../pages/SellerPages/SellerEarnings/SellerEarnings";
+import SellerSalesReport from "../pages/SellerPages/SellersSalesReport/SellerSalesReport";
+import SellerProfile from "../pages/SellerPages/SellerProfile/SellerProfile";
 
 export const router = createBrowserRouter([
   /* ================= PUBLIC ================= */
@@ -141,11 +146,32 @@ export const router = createBrowserRouter([
           </SellerRoute>
         ),
       },
+      {
+        path: "seller/manage-products",
+        element:<SellerRoute><ManageProducts></ManageProducts></SellerRoute>
+      },
+      {
+        path: "seller/orders",
+        element:<SellerRoute><SellerOrders></SellerOrders></SellerRoute>
+      },
+      {
+        path: "seller/earnings",
+        element:<SellerRoute><SellerEarnings></SellerEarnings></SellerRoute>
+      },
+      {
+        path:"seller/sales-report",
+        element: <SellerRoute><SellerSalesReport></SellerSalesReport></SellerRoute>
+      },
+      {
+        path:"seller/seller-profile",
+        element: <SellerRoute><SellerProfile></SellerProfile></SellerRoute>
+      },
       // Admin Routes
       {
         path:"admin",
         element:<AdminRoute><AdminDashboarded></AdminDashboarded></AdminRoute>
       }
+      
 
     ],
   },
