@@ -30,6 +30,7 @@ import SellerEarnings from "../pages/SellerPages/SellerEarnings/SellerEarnings";
 import SellerSalesReport from "../pages/SellerPages/SellersSalesReport/SellerSalesReport";
 import SellerProfile from "../pages/SellerPages/SellerProfile/SellerProfile";
 import SellerStorePage from "../pages/Store/SellerStorePage/SellerStorePage";
+import ManageUsers from "../pages/AdminPages/ManageUsers/ManageUsers";
 
 export const router = createBrowserRouter([
   /* ================= PUBLIC ================= */
@@ -175,6 +176,10 @@ export const router = createBrowserRouter([
       {
         path: "admin",
         element: <AdminRoute><AdminDashboarded></AdminDashboarded></AdminRoute>
+      },
+      {
+        path:"admin/manage-users",
+        element:<AdminRoute><ManageUsers></ManageUsers></AdminRoute>
       }
 
 
