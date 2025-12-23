@@ -29,6 +29,7 @@ import SellerOrders from "../pages/SellerPages/SellerOrders/SellerOrders";
 import SellerEarnings from "../pages/SellerPages/SellerEarnings/SellerEarnings";
 import SellerSalesReport from "../pages/SellerPages/SellersSalesReport/SellerSalesReport";
 import SellerProfile from "../pages/SellerPages/SellerProfile/SellerProfile";
+import SellerStorePage from "../pages/Store/SellerStorePage/SellerStorePage";
 
 export const router = createBrowserRouter([
   /* ================= PUBLIC ================= */
@@ -56,6 +57,10 @@ export const router = createBrowserRouter([
       {
         path: "product/:id",
         Component: ProductDetails
+      },
+      {
+        path: "stores/:sellerId",
+        Component: SellerStorePage
       },
 
       {
@@ -107,7 +112,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "customer",
-        Component:CustomerDashboard
+        Component: CustomerDashboard
       },
 
 
@@ -119,7 +124,7 @@ export const router = createBrowserRouter([
       //   index: true,
       //   element: <DashboardHome />
       // },
-        /* customer ROUTES */
+      /* customer ROUTES */
       // {
       //   path:"/customer",
       //   element: <CustomerRoute><CustomerDashboard></CustomerDashboard></CustomerRoute>
@@ -131,12 +136,12 @@ export const router = createBrowserRouter([
         element: <SellerRoute><SellerDashboard></SellerDashboard></SellerRoute>
       },
       {
-        path:"seller/products",
-        element:<SellerRoute><SellerProducts></SellerProducts></SellerRoute>
+        path: "seller/products",
+        element: <SellerRoute><SellerProducts></SellerProducts></SellerRoute>
       },
       {
-        path:"seller/edit-product/:id",
-        element:<SellerRoute><EditProduct></EditProduct></SellerRoute>
+        path: "seller/edit-product/:id",
+        element: <SellerRoute><EditProduct></EditProduct></SellerRoute>
       },
       {
         path: "seller/add-product",
@@ -148,30 +153,30 @@ export const router = createBrowserRouter([
       },
       {
         path: "seller/manage-products",
-        element:<SellerRoute><ManageProducts></ManageProducts></SellerRoute>
+        element: <SellerRoute><ManageProducts></ManageProducts></SellerRoute>
       },
       {
         path: "seller/orders",
-        element:<SellerRoute><SellerOrders></SellerOrders></SellerRoute>
+        element: <SellerRoute><SellerOrders></SellerOrders></SellerRoute>
       },
       {
         path: "seller/earnings",
-        element:<SellerRoute><SellerEarnings></SellerEarnings></SellerRoute>
+        element: <SellerRoute><SellerEarnings></SellerEarnings></SellerRoute>
       },
       {
-        path:"seller/sales-report",
+        path: "seller/sales-report",
         element: <SellerRoute><SellerSalesReport></SellerSalesReport></SellerRoute>
       },
       {
-        path:"seller/seller-profile",
+        path: "seller/seller-profile",
         element: <SellerRoute><SellerProfile></SellerProfile></SellerRoute>
       },
       // Admin Routes
       {
-        path:"admin",
-        element:<AdminRoute><AdminDashboarded></AdminDashboarded></AdminRoute>
+        path: "admin",
+        element: <AdminRoute><AdminDashboarded></AdminDashboarded></AdminRoute>
       }
-      
+
 
     ],
   },

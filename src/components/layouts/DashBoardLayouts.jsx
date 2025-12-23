@@ -9,7 +9,6 @@ import {
     FaHeart,
     FaHome,
     FaList,
-    FaPauseCircle,
     FaPlusCircle,
     FaShoppingBag,
     FaSignOutAlt,
@@ -22,25 +21,46 @@ import {
 import VendoSphereLogo from "../shared/Logo/VendoSphereLogo";
 import UseUserRole from "../../hooks/UseUserRole";
 import UseAuth from "../../hooks/UseAuth";
+import { useQuery } from "@tanstack/react-query";
+import UseAxios from "../../hooks/UseAxios";
 
 const DashBoardLayouts = () => {
     const navigate = useNavigate();
-    const { logOutUser } = UseAuth();
+    const { logOutUser, user } = UseAuth();
     const { role, roleLoading } = UseUserRole();
+    const axios = UseAxios();
+
+    // Fetch seller info to get _id
+   const { data: sellerData } = useQuery({
+  queryKey: ["seller-info", user?.email],
+  queryFn: async () => {
+    if (!user?.email) return null;
+    const res = await axios.get(`/seller/profile?email=${user.email}`);
+    return res.data; // should include _id
+  },
+  enabled: !!user?.email,
+});
+
+    console.log("seller data" , sellerData)
+
+    const sellerId = sellerData?._id;
 
     const handleLogout = async () => {
         await logOutUser();
         navigate("/login");
     };
 
-    if (roleLoading || !role) {
+    if (roleLoading || !role ) {
         return (
             <div className="h-screen flex items-center justify-center">
                 <span className="loading loading-spinner loading-lg"></span>
             </div>
         );
     }
-console.log("USER ROLE:", role);
+
+
+    console.log("USER ROLE:", role);
+    console.log("seller Id", sellerId)
     return (
         <div className="drawer lg:drawer-open">
             <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
@@ -102,6 +122,15 @@ console.log("USER ROLE:", role);
                             <li><NavLink to="/dashboard/seller/earnings"><FaDollarSign /> Earnings</NavLink></li>
                             <li><NavLink to="/dashboard/seller/sales-report"><FaChartLine /> Sales Report</NavLink></li>
                             <li><NavLink to="/dashboard/seller/seller-profile"><FaUserCircle />Profile Management</NavLink></li>
+
+                            {/* View My Store */}
+                            {sellerId && (
+                                <li>
+                                    <NavLink to={`/stores/${sellerId}`}>
+                                        <FaStore /> View My Store
+                                    </NavLink>
+                                </li>
+                            )}
                         </>
                     )}
 
