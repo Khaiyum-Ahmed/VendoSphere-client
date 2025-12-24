@@ -17,7 +17,7 @@ const Navbar = () => {
       console.error(err);
     }
   };
-  console.log(role)
+  console.log(role,"users da:", user)
 
   /* ================= NAV LINKS ================= */
   const navLinks = (
@@ -52,6 +52,10 @@ const Navbar = () => {
               <li><NavLink to="/wishlist">Wishlist</NavLink></li>
             </>
           )}
+          {/* ✅ COMMON PROFILE SETTINGS (ALL ROLES) */}
+          <li>
+            <NavLink to="/profile">Profile Settings</NavLink>
+          </li>
 
           <li>
             <button

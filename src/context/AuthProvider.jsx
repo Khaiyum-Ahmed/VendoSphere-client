@@ -17,16 +17,29 @@ const AuthProvider = ({ children }) => {
         return signInWithEmailAndPassword(auth, email, password);
     }
 
-       const logOutUser = () => {
+    const logOutUser = () => {
         setLoading(true);
         return signOut(auth);
     }
-     const updateUserProfile = profileInfo =>{
-        return updateProfile(auth.currentUser, profileInfo);
-    }
-      const googleProvider = new GoogleAuthProvider();
+    //  const updateUserProfile = profileInfo =>{
+    //     return updateProfile(auth.currentUser, profileInfo);
+    // }
 
-    const googleJoin = ()=>{
+    const updateUserProfile = async (name, photoURL) => {
+        if (!auth.currentUser) return;
+
+        await updateProfile(auth.currentUser, {
+            displayName: name,
+            photoURL,
+        });
+
+        setUser({ ...auth.currentUser });
+    };
+
+
+    const googleProvider = new GoogleAuthProvider();
+
+    const googleJoin = () => {
         setLoading(true);
         return signInWithPopup(auth, googleProvider);
     }

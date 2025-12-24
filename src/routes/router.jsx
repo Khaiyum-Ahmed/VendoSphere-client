@@ -36,6 +36,7 @@ import AdminManageProducts from "../pages/AdminPages/ManageProducts/AdminManageP
 import AdminManageOrders from "../pages/AdminPages/ManageOrders/AdminManageOrders";
 import AdminManagePayouts from "../pages/AdminPages/AdminManagePayouts/AdminManagePayouts";
 import AdminAnalytics from "../pages/AdminPages/AdminAnalytics/AdminAnalytics";
+import ProfileSettings from "../pages/ProfileSetting/ProfileSettings";
 
 export const router = createBrowserRouter([
   /* ================= PUBLIC ================= */
@@ -85,6 +86,10 @@ export const router = createBrowserRouter([
             <BecomeSeller />
           </PrivateRoutes>
         ),
+      },
+      {
+        path:"profile",
+        element:<PrivateRoutes><ProfileSettings></ProfileSettings></PrivateRoutes>
       },
 
       {
