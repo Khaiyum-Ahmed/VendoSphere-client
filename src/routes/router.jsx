@@ -32,6 +32,7 @@ import SellerProfile from "../pages/SellerPages/SellerProfile/SellerProfile";
 import SellerStorePage from "../pages/Store/SellerStorePage/SellerStorePage";
 import ManageUsers from "../pages/AdminPages/ManageUsers/ManageUsers";
 import ManageSellers from "../pages/AdminPages/ManageSellers/ManageSellers";
+import AdminManageProducts from "../pages/AdminPages/ManageProducts/AdminManageProducts";
 
 export const router = createBrowserRouter([
   /* ================= PUBLIC ================= */
@@ -185,6 +186,10 @@ export const router = createBrowserRouter([
       {
         path:"admin/manage-sellers",
         element:<AdminRoute><ManageSellers></ManageSellers></AdminRoute>
+      },
+      {
+        path:"admin/manage-products",
+        element:<AdminRoute><AdminManageProducts></AdminManageProducts></AdminRoute>
       }
 
 
