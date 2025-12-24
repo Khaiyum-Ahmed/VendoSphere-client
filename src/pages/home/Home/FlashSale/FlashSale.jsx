@@ -76,7 +76,7 @@ const FlashSale = () => {
                                 className="w-full h-36 object-cover"
                             />
                             <div className="p-2 text-center">
-                                <p className="text-lg font-medium">{product.name}</p>
+                                <p className="text-base font-medium">{product.name}</p>
                                 <p className="text-red-500 font-bold">
                                     $ {product.price - (product.discount || 0)}
                                 </p>

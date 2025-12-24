@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import UseAxios from "../../../../hooks/UseAxios";
 
 const CategoryProducts = () => {
@@ -19,7 +19,7 @@ const CategoryProducts = () => {
         enabled: !!categorySlug,
     });
 
-    
+
 
     if (isLoading) {
         return <div className="text-center py-10">Loading products...</div>;
@@ -47,9 +47,10 @@ const CategoryProducts = () => {
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {products.map((product) => (
-                    <div
+                    <Link
                         key={product._id}
-                        className="border rounded-lg p-3 shadow hover:shadow-lg transition"
+                        to={`/product/${product._id}`}
+                        className="block border rounded-lg p-3 shadow hover:shadow-lg hover:-translate-y-1 transition"
                     >
                         {/* product image */}
                         <img
@@ -65,9 +66,10 @@ const CategoryProducts = () => {
                         </p>
 
                         <p className="font-bold text-primary">${product.price}</p>
-                    </div>
+                    </Link>
                 ))}
             </div>
+
         </section>
     );
 };
