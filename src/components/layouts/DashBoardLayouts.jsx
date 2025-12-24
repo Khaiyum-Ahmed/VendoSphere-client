@@ -2,6 +2,7 @@ import { NavLink, Outlet, useNavigate } from "react-router";
 import {
     FaBoxes,
     FaBoxOpen,
+    FaChartBar,
     FaChartLine,
     FaClipboardList,
     FaDollarSign,
@@ -146,8 +147,8 @@ const DashBoardLayouts = () => {
                             <li><NavLink to="/dashboard/admin/manage-sellers"><FaUserShield /> Manage Sellers</NavLink></li>
                             <li><NavLink to="/dashboard/admin/manage-products"><FaBoxes /> Manage Products</NavLink></li>
                             <li><NavLink to="/dashboard/admin/manage-orders"><FaClipboardList /> Manage Orders</NavLink></li>
-                            <li><NavLink to="/dashboard/admin/manage-categories"><FaList /> Categories</NavLink></li>
                             <li><NavLink to="/dashboard/admin/manage-payouts"><FaStore /> Withdraw Requests</NavLink></li>
+                            <li><NavLink to="/dashboard/admin/admin-analytics"><FaChartBar /> Analytics </NavLink></li>
                         </>
                     )}
 

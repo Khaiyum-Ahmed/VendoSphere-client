@@ -100,7 +100,7 @@ const AdminDashboard = () => {
                 ))}
 
                 {/* ================= 💰 PENDING PAYOUT TOTAL ================= */}
-                <Link to="/admin/payouts">
+                <Link to="manage-payouts">
                     <div className="card bg-warning/10 border border-warning shadow hover:shadow-xl transition cursor-pointer">
                         <div className="card-body flex flex-row items-center gap-4">
                             <div className="text-4xl text-warning">

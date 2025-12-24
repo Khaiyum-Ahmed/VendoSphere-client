@@ -35,6 +35,7 @@ import ManageSellers from "../pages/AdminPages/ManageSellers/ManageSellers";
 import AdminManageProducts from "../pages/AdminPages/ManageProducts/AdminManageProducts";
 import AdminManageOrders from "../pages/AdminPages/ManageOrders/AdminManageOrders";
 import AdminManagePayouts from "../pages/AdminPages/AdminManagePayouts/AdminManagePayouts";
+import AdminAnalytics from "../pages/AdminPages/AdminAnalytics/AdminAnalytics";
 
 export const router = createBrowserRouter([
   /* ================= PUBLIC ================= */
@@ -200,6 +201,10 @@ export const router = createBrowserRouter([
       {
         path:"admin/manage-payouts",
         element:<AdminRoute><AdminManagePayouts></AdminManagePayouts></AdminRoute>
+      },
+      {
+        path:"admin/admin-analytics",
+        element:<AdminRoute><AdminAnalytics></AdminAnalytics></AdminRoute>
       }
 
 
