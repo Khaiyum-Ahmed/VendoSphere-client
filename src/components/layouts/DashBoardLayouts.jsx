@@ -143,11 +143,11 @@ const DashBoardLayouts = () => {
                                 </NavLink>
                             </li>
                             <li><NavLink to="/dashboard/admin/manage-users"><FaUsersCog /> Manage Users</NavLink></li>
-                            <li><NavLink to="/dashboard/manage-sellers"><FaUserShield /> Manage Sellers</NavLink></li>
-                            <li><NavLink to="/dashboard/manage-products"><FaBoxes /> Manage Products</NavLink></li>
-                            <li><NavLink to="/dashboard/manage-orders"><FaClipboardList /> Manage Orders</NavLink></li>
-                            <li><NavLink to="/dashboard/manage-categories"><FaList /> Categories</NavLink></li>
-                            <li><NavLink to="/dashboard/withdraw-requests"><FaStore /> Withdraw Requests</NavLink></li>
+                            <li><NavLink to="/dashboard/admin/manage-sellers"><FaUserShield /> Manage Sellers</NavLink></li>
+                            <li><NavLink to="/dashboard/admin/manage-products"><FaBoxes /> Manage Products</NavLink></li>
+                            <li><NavLink to="/dashboard/admin/manage-orders"><FaClipboardList /> Manage Orders</NavLink></li>
+                            <li><NavLink to="/dashboard/admin/manage-categories"><FaList /> Categories</NavLink></li>
+                            <li><NavLink to="/dashboard/admin/withdraw-requests"><FaStore /> Withdraw Requests</NavLink></li>
                         </>
                     )}
 
