@@ -147,7 +147,7 @@ const DashBoardLayouts = () => {
                             <li><NavLink to="/dashboard/admin/manage-products"><FaBoxes /> Manage Products</NavLink></li>
                             <li><NavLink to="/dashboard/admin/manage-orders"><FaClipboardList /> Manage Orders</NavLink></li>
                             <li><NavLink to="/dashboard/admin/manage-categories"><FaList /> Categories</NavLink></li>
-                            <li><NavLink to="/dashboard/admin/withdraw-requests"><FaStore /> Withdraw Requests</NavLink></li>
+                            <li><NavLink to="/dashboard/admin/manage-payouts"><FaStore /> Withdraw Requests</NavLink></li>
                         </>
                     )}
 

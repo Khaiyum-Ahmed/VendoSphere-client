@@ -12,7 +12,7 @@ const AdminManageProducts = () => {
         queryFn: async () => (await axios.get("/admin/products")).data,
     });
 
-    console.log(products)
+    // console.log(products)
 
     const statusMutation = useMutation({
         mutationFn: ({ id, status }) =>
