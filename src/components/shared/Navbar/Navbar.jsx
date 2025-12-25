@@ -48,8 +48,8 @@ const Navbar = () => {
           {role === "customer" && (
             <>
               <li><NavLink to="/dashboard">Dashboard</NavLink></li>
-              <li><NavLink to="/orders">My Orders</NavLink></li>
-              <li><NavLink to="/wishlist">Wishlist</NavLink></li>
+              <li><NavLink to="/dashboard/customer/orders">My Orders</NavLink></li>
+              <li><NavLink to="/dashboard/customer/wishlist">Wishlist</NavLink></li>
             </>
           )}
           {/* ✅ COMMON PROFILE SETTINGS (ALL ROLES) */}

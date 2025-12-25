@@ -39,6 +39,7 @@ import AdminAnalytics from "../pages/AdminPages/AdminAnalytics/AdminAnalytics";
 import ProfileSettings from "../pages/ProfileSetting/ProfileSettings";
 import DashboardRedirect from "../hooks/DashboardRedirect";
 import CustomerProfile from "../pages/CustomerPage/CustomerProfile/CustomerProfile";
+import Wishlist from "../pages/CustomerPage/WishList/Wishlist";
 
 export const router = createBrowserRouter([
   /* ================= PUBLIC ================= */
@@ -129,8 +130,13 @@ export const router = createBrowserRouter([
         element: <CustomerRoute><CustomerDashboard></CustomerDashboard></CustomerRoute>
       },
       {
+        path:"customer/wishlist",
+        element:<CustomerRoute><Wishlist></Wishlist></CustomerRoute>
+      },
+
+      {
         path: "/dashboard/customer/profile",
-        Component:CustomerProfile
+        element:<CustomerRoute><CustomerProfile></CustomerProfile></CustomerRoute>
       },
 
 
