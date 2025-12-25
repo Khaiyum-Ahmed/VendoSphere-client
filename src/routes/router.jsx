@@ -37,6 +37,8 @@ import AdminManageOrders from "../pages/AdminPages/ManageOrders/AdminManageOrder
 import AdminManagePayouts from "../pages/AdminPages/AdminManagePayouts/AdminManagePayouts";
 import AdminAnalytics from "../pages/AdminPages/AdminAnalytics/AdminAnalytics";
 import ProfileSettings from "../pages/ProfileSetting/ProfileSettings";
+import DashboardRedirect from "../hooks/DashboardRedirect";
+import CustomerProfile from "../pages/CustomerPage/CustomerProfile/CustomerProfile";
 
 export const router = createBrowserRouter([
   /* ================= PUBLIC ================= */
@@ -88,8 +90,8 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path:"profile",
-        element:<PrivateRoutes><ProfileSettings></ProfileSettings></PrivateRoutes>
+        path: "profile",
+        element: <PrivateRoutes><ProfileSettings></ProfileSettings></PrivateRoutes>
       },
 
       {
@@ -119,27 +121,19 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        Component: CustomerDashboard
+        Component: DashboardRedirect
       },
+      /* Customer ROUTES */
       {
         path: "customer",
-        Component: CustomerDashboard
+        element: <CustomerRoute><CustomerDashboard></CustomerDashboard></CustomerRoute>
+      },
+      {
+        path: "/dashboard/customer/profile",
+        Component:CustomerProfile
       },
 
 
-      // {
-      //   path: "orders",
-      //   Component: Myor
-      // }
-      // {
-      //   index: true,
-      //   element: <DashboardHome />
-      // },
-      /* customer ROUTES */
-      // {
-      //   path:"/customer",
-      //   element: <CustomerRoute><CustomerDashboard></CustomerDashboard></CustomerRoute>
-      // },
 
       /* SELLER ROUTES */
       {
@@ -188,28 +182,28 @@ export const router = createBrowserRouter([
         element: <AdminRoute><AdminDashboarded></AdminDashboarded></AdminRoute>
       },
       {
-        path:"admin/manage-users",
-        element:<AdminRoute><ManageUsers></ManageUsers></AdminRoute>
+        path: "admin/manage-users",
+        element: <AdminRoute><ManageUsers></ManageUsers></AdminRoute>
       },
       {
-        path:"admin/manage-sellers",
-        element:<AdminRoute><ManageSellers></ManageSellers></AdminRoute>
+        path: "admin/manage-sellers",
+        element: <AdminRoute><ManageSellers></ManageSellers></AdminRoute>
       },
       {
-        path:"admin/manage-products",
-        element:<AdminRoute><AdminManageProducts></AdminManageProducts></AdminRoute>
+        path: "admin/manage-products",
+        element: <AdminRoute><AdminManageProducts></AdminManageProducts></AdminRoute>
       },
       {
-        path:"admin/manage-orders",
-        element:<AdminRoute><AdminManageOrders></AdminManageOrders></AdminRoute>
+        path: "admin/manage-orders",
+        element: <AdminRoute><AdminManageOrders></AdminManageOrders></AdminRoute>
       },
       {
-        path:"admin/manage-payouts",
-        element:<AdminRoute><AdminManagePayouts></AdminManagePayouts></AdminRoute>
+        path: "admin/manage-payouts",
+        element: <AdminRoute><AdminManagePayouts></AdminManagePayouts></AdminRoute>
       },
       {
-        path:"admin/admin-analytics",
-        element:<AdminRoute><AdminAnalytics></AdminAnalytics></AdminRoute>
+        path: "admin/admin-analytics",
+        element: <AdminRoute><AdminAnalytics></AdminAnalytics></AdminRoute>
       }
 
 

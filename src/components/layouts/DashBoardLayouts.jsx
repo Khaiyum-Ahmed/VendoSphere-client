@@ -88,12 +88,7 @@ const DashBoardLayouts = () => {
                 <ul className="menu bg-base-200 min-h-full w-80 p-4 space-y-2">
                     <VendoSphereLogo />
 
-                    {/* <li>
-                        <NavLink to="/dashboard">
-                            <FaHome /> Dashboard Home
-                        </NavLink>
-                    </li> */}
-
+            
                     {/* CUSTOMER */}
                     {role === "customer" && (
                         <>
@@ -102,9 +97,9 @@ const DashBoardLayouts = () => {
                                     <FaHome /> Dashboard Home
                                 </NavLink>
                             </li>
-                            <li><NavLink to="/dashboard/orders"><FaShoppingBag /> My Orders</NavLink></li>
-                            <li><NavLink to="/dashboard/wishlist"><FaHeart /> Wishlist</NavLink></li>
-                            <li><NavLink to="/dashboard/profile"><FaUser /> Profile</NavLink></li>
+                            <li><NavLink to="/dashboard/customer/orders"><FaShoppingBag /> My Orders</NavLink></li>
+                            <li><NavLink to="/dashboard/customer/wishlist"><FaHeart /> Wishlist</NavLink></li>
+                            <li><NavLink to="/dashboard/customer/profile"><FaUser /> Profile</NavLink></li>
                         </>
                     )}
 

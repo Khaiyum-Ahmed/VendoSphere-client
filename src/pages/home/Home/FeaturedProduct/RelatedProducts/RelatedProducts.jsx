@@ -37,7 +37,7 @@ console.log(products)
                         <img
                             src={p.images}
                             alt={p.productName}
-                            className="w-fit h-40 object-cover rounded"
+                            className="w-full h-40 object-cover rounded"
                         />
                         <p className="mt-2 font-medium">{p.name}</p>
                         <p className="text-sm text-gray-500">${p.price}</p>
