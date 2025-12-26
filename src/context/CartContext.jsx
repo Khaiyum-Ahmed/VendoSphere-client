@@ -79,6 +79,17 @@ export const CartProvider = ({ children }) => {
     },
   });
 
+  /* ================= REORDER ================= */
+  const reorderMutation = useMutation({
+    mutationFn: async (orderId) => {
+      await axiosSecure.post(`/orders/${orderId}/reorder`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["cart", user?.email]);
+      toast.success("Reorder items added to cart 🛒");
+    },
+  });
+
   return (
     <CartContext.Provider
       value={{
@@ -88,6 +99,7 @@ export const CartProvider = ({ children }) => {
         updateQuantity: updateQtyMutation.mutate,
         removeFromCart: removeMutation.mutate,
         clearCart: clearMutation.mutate,
+        reorderCart: reorderMutation.mutate, 
       }}
     >
       {children}

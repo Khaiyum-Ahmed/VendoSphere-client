@@ -1,7 +1,15 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
-import { FaShoppingBag, FaHeart, FaClock, FaCheckCircle } from "react-icons/fa";
+import {
+    FaShoppingBag,
+    FaHeart,
+    FaClock,
+    FaCheckCircle,
+    FaTruck,
+    FaMoneyBillWave,
+    FaUser,
+    FaBell,
+} from "react-icons/fa";
 import UseAuth from "../../../hooks/UseAuth";
 import UseAxios from "../../../hooks/UseAxios";
 import Loading from "../../Loading/Loading";
@@ -10,7 +18,7 @@ const CustomerDashboard = () => {
     const { user } = UseAuth();
     const axiosSecure = UseAxios();
 
-    // Fetch customer stats
+    /* ================= STATS ================= */
     const { data: stats = {}, isLoading } = useQuery({
         queryKey: ["customer-stats", user?.email],
         queryFn: async () => {
@@ -20,7 +28,7 @@ const CustomerDashboard = () => {
         enabled: !!user?.email,
     });
 
-    // Fetch recent orders
+    /* ================= RECENT ORDERS ================= */
     const { data: recentOrders = [] } = useQuery({
         queryKey: ["recent-orders", user?.email],
         queryFn: async () => {
@@ -30,59 +38,55 @@ const CustomerDashboard = () => {
         enabled: !!user?.email,
     });
 
-    if (isLoading) {
-        return <Loading></Loading>;
-    }
+    if (isLoading) return <Loading />;
 
     return (
-        <div className="p-4 md:p-8">
-            <h2 className="text-3xl font-bold mb-6">Welcome, {user?.displayName}</h2>
-
-            {/* Stats Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-                <div className="card bg-primary text-white shadow-xl p-5">
-                    <div className="flex items-center gap-4">
-                        <FaShoppingBag size={32} />
-                        <div>
-                            <p className="text-lg">Total Orders</p>
-                            <h2 className="text-2xl font-bold">{stats.totalOrders || 0}</h2>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="card bg-warning text-black shadow-xl p-5">
-                    <div className="flex items-center gap-4">
-                        <FaClock size={32} />
-                        <div>
-                            <p className="text-lg">Pending</p>
-                            <h2 className="text-2xl font-bold">{stats.pendingOrders || 0}</h2>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="card bg-success text-white shadow-xl p-5">
-                    <div className="flex items-center gap-4">
-                        <FaCheckCircle size={32} />
-                        <div>
-                            <p className="text-lg">Delivered</p>
-                            <h2 className="text-2xl font-bold">{stats.deliveredOrders || 0}</h2>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="card bg-pink-500 text-white shadow-xl p-5">
-                    <div className="flex items-center gap-4">
-                        <FaHeart size={32} />
-                        <div>
-                            <p className="text-lg">Wishlist</p>
-                            <h2 className="text-2xl font-bold">{stats.wishlistCount || 0}</h2>
-                        </div>
-                    </div>
-                </div>
+        <div className="p-4 md:p-8 space-y-10">
+            {/* Greeting */}
+            <div>
+                <h2 className="text-3xl font-bold">
+                    Hello, {user?.displayName || "Customer"} 👋
+                </h2>
+                <p className="text-gray-500">
+                    Welcome back! Here’s a quick overview of your account.
+                </p>
             </div>
 
+            {/* Quick Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
+                <StatCard title="Total Orders" value={stats.totalOrders} icon={<FaShoppingBag />} />
+                <StatCard title="Pending" value={stats.pendingOrders} icon={<FaClock />} />
+                <StatCard title="Shipped" value={stats.shippedOrders} icon={<FaTruck />} />
+                <StatCard title="Delivered" value={stats.deliveredOrders} icon={<FaCheckCircle />} />
+                <StatCard title="Wishlist" value={stats.wishlistCount} icon={<FaHeart />} />
+                <StatCard title="Total Spent" value={`$${stats.totalSpent || 0}`} icon={<FaMoneyBillWave />} />
+            </div>
+
+            {/* Shortcuts */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <Shortcut to="/dashboard/customer/orders" label="My Orders" icon={<FaShoppingBag />} />
+                <Shortcut to="/dashboard/customer/wishlist" label="Wishlist" icon={<FaHeart />} />
+                <Shortcut to="/dashboard/customer/profile" label="Profile Settings" icon={<FaUser />} />
+            </div>
+
+            {/* Notifications (Optional) */}
+            {stats.notifications?.length > 0 && (
+                <div className="card bg-base-100 shadow p-6">
+                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                        <FaBell /> Notifications
+                    </h3>
+                    <ul className="mt-3 space-y-2">
+                        {stats.notifications.map((n, idx) => (
+                            <li key={idx} className="text-sm text-gray-600">
+                                • {n}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
             {/* Recent Orders */}
-            <div className="mt-10">
+            <div>
                 <h3 className="text-xl font-semibold mb-4">Recent Orders</h3>
 
                 {recentOrders.length === 0 ? (
@@ -108,8 +112,8 @@ const CustomerDashboard = () => {
                                         <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                                         <td>
                                             <Link
-                                                to={`/dashboard/customer/order/${order._id}`}
-                                                className="btn btn-primary btn-sm"
+                                                to={`/account/orders/${order._id}`}
+                                                className="btn btn-primary btn-xs"
                                             >
                                                 View
                                             </Link>
@@ -124,5 +128,24 @@ const CustomerDashboard = () => {
         </div>
     );
 };
+
+/* ================= REUSABLE COMPONENTS ================= */
+
+const StatCard = ({ title, value, icon }) => (
+    <div className="card bg-base-100 shadow p-4 flex flex-row items-center gap-4">
+        <div className="text-3xl text-primary">{icon}</div>
+        <div>
+            <p className="text-sm text-gray-500">{title}</p>
+            <h3 className="text-xl font-bold">{value || 0}</h3>
+        </div>
+    </div>
+);
+
+const Shortcut = ({ to, label, icon }) => (
+    <Link to={to} className="card bg-base-100 shadow hover:shadow-lg transition p-5 flex items-center gap-4">
+        <div className="text-2xl text-primary">{icon}</div>
+        <h3 className="font-semibold">{label}</h3>
+    </Link>
+);
 
 export default CustomerDashboard;

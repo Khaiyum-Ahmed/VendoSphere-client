@@ -40,6 +40,7 @@ import ProfileSettings from "../pages/ProfileSetting/ProfileSettings";
 import DashboardRedirect from "../hooks/DashboardRedirect";
 import CustomerProfile from "../pages/CustomerPage/CustomerProfile/CustomerProfile";
 import Wishlist from "../pages/CustomerPage/WishList/Wishlist";
+import OrderHistory from "../pages/CustomerPage/OrderHistory/OrderHistory";
 
 export const router = createBrowserRouter([
   /* ================= PUBLIC ================= */
@@ -132,6 +133,10 @@ export const router = createBrowserRouter([
       {
         path:"customer/wishlist",
         element:<CustomerRoute><Wishlist></Wishlist></CustomerRoute>
+      },
+      {
+        path:"customer/orders",
+        element:<CustomerRoute><OrderHistory></OrderHistory></CustomerRoute>
       },
 
       {
