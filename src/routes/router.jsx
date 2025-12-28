@@ -41,6 +41,9 @@ import DashboardRedirect from "../hooks/DashboardRedirect";
 import CustomerProfile from "../pages/CustomerPage/CustomerProfile/CustomerProfile";
 import Wishlist from "../pages/CustomerPage/WishList/Wishlist";
 import OrderHistory from "../pages/CustomerPage/OrderHistory/OrderHistory";
+import CheckoutPage from "../pages/CheckOutPage/CheckoutPage";
+import OrderSuccess from "../pages/CheckOutPage/OrderSuccess";
+import OrderDetails from "../pages/CustomerPage/OrderDetails/OrderDetails";
 
 export const router = createBrowserRouter([
   /* ================= PUBLIC ================= */
@@ -72,6 +75,14 @@ export const router = createBrowserRouter([
       {
         path: "stores/:sellerId",
         Component: SellerStorePage
+      },
+      {
+        path:'checkout',
+        element:<PrivateRoutes><CheckoutPage></CheckoutPage></PrivateRoutes>
+      },
+      {
+        path:'order-success/:orderId',
+        element:<PrivateRoutes><OrderSuccess></OrderSuccess></PrivateRoutes>
       },
 
       {
@@ -137,6 +148,10 @@ export const router = createBrowserRouter([
       {
         path:"customer/orders",
         element:<CustomerRoute><OrderHistory></OrderHistory></CustomerRoute>
+      },
+      {
+        path:"customer/orders/:orderId",
+        element:<CustomerRoute><OrderDetails></OrderDetails></CustomerRoute>
       },
 
       {

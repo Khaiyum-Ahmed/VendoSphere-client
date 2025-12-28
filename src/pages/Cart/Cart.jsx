@@ -1,10 +1,11 @@
 import { UseCart } from "../../context/CartContext";
 import { FiTrash2 } from "react-icons/fi";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const Cart = () => {
     const { cart, isLoading, updateQuantity, removeFromCart, clearCart } =
         UseCart();
+        const navigate = useNavigate();
 
     if (isLoading) {
         return <div className="text-center mt-20">Loading cart...</div>;
@@ -102,7 +103,7 @@ const Cart = () => {
                         <span>${total.toFixed(2)}</span>
                     </p>
 
-                    <button className="btn btn-primary text-white text-xl w-full mt-4">
+                    <button onClick={() => navigate("/checkout")} className="btn btn-primary text-white text-xl w-full mt-4">
                         Proceed to Checkout
                     </button>
 

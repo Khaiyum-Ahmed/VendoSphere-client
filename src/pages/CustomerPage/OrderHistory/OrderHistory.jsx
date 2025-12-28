@@ -22,7 +22,7 @@ const OrderHistory = () => {
             return res.data;
         },
     });
-
+console.log("order details",orders)
     if (isLoading) {
         return <div className="text-center py-20">Loading orders...</div>;
     }
@@ -84,7 +84,7 @@ const OrderHistory = () => {
                                 <td>${order.totalAmount}</td>
                                 <td className="space-x-2">
                                     <Link
-                                        to={`/account/orders/${order._id}`}
+                                        to={`/dashboard/customer/orders/${order._id}`}
                                         className="btn btn-xs btn-outline"
                                     >
                                         View
@@ -111,14 +111,14 @@ const OrderHistory = () => {
 
                             <div className="flex gap-2 mt-2">
                                 <Link
-                                    to={`/account/orders/${order._id}`}
+                                    to={`/dashboard/customer/orders/${order._id}`}
                                     className="btn btn-sm btn-outline"
                                 >
                                     View
                                 </Link>
                                 <Link
                                     to={`/reorder/${order._id}`}
-                                    className="btn btn-sm btn-primary"
+                                    className="btn btn-sm btn-primary text-white"
                                 >
                                     Reorder
                                 </Link>

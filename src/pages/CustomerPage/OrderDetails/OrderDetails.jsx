@@ -79,8 +79,11 @@ const OrderDetails = () => {
     if (isLoading) {
         return <div className="text-center py-20">Loading order...</div>;
     }
+    if (!order || !order.products) {
+        return <div className="text-center py-20">Order not found</div>;
+    }
 
-    const canCancel = order.status === "Pending" && timeLeft !== null;
+    const canCancel = order.status === "pending" && timeLeft !== null;
 
     return (
         <div className="max-w-6xl mx-auto space-y-8">
@@ -118,7 +121,7 @@ const OrderDetails = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {order.items.map((item) => (
+                            {order.products?.map((item) => (
                                 <tr key={item.productId}>
                                     <td className="flex items-center gap-3">
                                         <img
@@ -153,11 +156,11 @@ const OrderDetails = () => {
             {/* ================= BILLING ================= */}
             <div className="card bg-base-100 shadow p-6">
                 <h3 className="font-semibold mb-2">Billing Summary</h3>
-                <p>Subtotal: ${order.pricing.subtotal}</p>
-                <p>Shipping: ${order.pricing.shippingCost}</p>
-                <p>Discount: -${order.pricing.discount}</p>
+                <p>Subtotal: ${order.subtotal}</p>
+                <p>Shipping: ${order.shippingCost}</p>
+                <p>Discount: -${order.discount}</p>
                 <p className="text-xl font-bold">
-                    Total: ${order.pricing.total}
+                    Total: ${order.totalAmount}
                 </p>
             </div>
 
@@ -173,8 +176,8 @@ const OrderDetails = () => {
 
                 <button
                     onClick={handleReorder}
-                    disabled={!order.items.length}
-                    className="btn btn-primary"
+                    disabled={!order.products?.length}
+                    className="btn btn-primary text-white"
                 >
                     Reorder
                 </button>

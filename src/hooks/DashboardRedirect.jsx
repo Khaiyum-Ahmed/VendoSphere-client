@@ -4,7 +4,7 @@ import UseUserRole from "./UseUserRole";
 const DashboardRedirect = () => {
     const { role, roleLoading } = UseUserRole(null);
 
-    // ⏳ Wait until role is loaded
+    //  Wait until role is loaded
     if (roleLoading) {
         return (
             <div className="flex items-center justify-center h-[60vh]">
@@ -13,7 +13,7 @@ const DashboardRedirect = () => {
         );
     }
 
-    // 🔁 Redirect based on role
+    //  Redirect based on role
     if (role === "admin") {
         return <Navigate to="/dashboard/admin" replace />;
     }
@@ -22,7 +22,7 @@ const DashboardRedirect = () => {
         return <Navigate to="/dashboard/seller" replace />;
     }
 
-    // ✅ Default → customer
+    //  Default → customer
     return <Navigate to="/dashboard/customer" replace />;
 };
 

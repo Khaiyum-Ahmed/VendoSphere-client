@@ -37,7 +37,7 @@ const CustomerDashboard = () => {
         },
         enabled: !!user?.email,
     });
-
+console.log(recentOrders)
     if (isLoading) return <Loading />;
 
     return (
@@ -104,15 +104,16 @@ const CustomerDashboard = () => {
                                 </tr>
                             </thead>
                             <tbody>
+                               
                                 {recentOrders.map((order) => (
                                     <tr key={order._id}>
                                         <td>{order._id.slice(-6)}</td>
-                                        <td>${order.total}</td>
+                                        <td>${order.totalAmount}</td>
                                         <td className="capitalize">{order.status}</td>
                                         <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                                         <td>
                                             <Link
-                                                to={`/account/orders/${order._id}`}
+                                                to={`/dashboard/customer/orders/${order._id}`}
                                                 className="btn btn-primary btn-xs"
                                             >
                                                 View
