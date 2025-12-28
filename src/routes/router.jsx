@@ -44,6 +44,8 @@ import OrderHistory from "../pages/CustomerPage/OrderHistory/OrderHistory";
 import CheckoutPage from "../pages/CheckOutPage/CheckoutPage";
 import OrderSuccess from "../pages/CheckOutPage/OrderSuccess";
 import OrderDetails from "../pages/CustomerPage/OrderDetails/OrderDetails";
+import Payment from "../pages/PaymentGateway/Payment";
+import PaymentHistory from "../pages/CustomerPage/PaymentHistory/PaymentHistory";
 
 export const router = createBrowserRouter([
   /* ================= PUBLIC ================= */
@@ -136,6 +138,7 @@ export const router = createBrowserRouter([
         index: true,
         Component: DashboardRedirect
       },
+      
       /* Customer ROUTES */
       {
         path: "customer",
@@ -155,8 +158,16 @@ export const router = createBrowserRouter([
       },
 
       {
-        path: "/dashboard/customer/profile",
+        path: "customer/profile",
         element:<CustomerRoute><CustomerProfile></CustomerProfile></CustomerRoute>
+      },
+      {
+        path:"customer/payment/:orderId",
+        element:<CustomerRoute><Payment></Payment></CustomerRoute>
+      },
+      {
+        path:"customer/paymentHistory",
+        element:<CustomerRoute><PaymentHistory></PaymentHistory></CustomerRoute>
       },
 
 

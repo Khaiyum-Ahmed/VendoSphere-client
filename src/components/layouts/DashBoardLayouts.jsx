@@ -2,6 +2,7 @@ import { NavLink, Outlet, useNavigate } from "react-router";
 import {
     FaBoxes,
     FaBoxOpen,
+    FaCcAmazonPay,
     FaChartBar,
     FaChartLine,
     FaClipboardList,
@@ -99,6 +100,7 @@ const DashBoardLayouts = () => {
                             </li>
                             <li><NavLink to="/dashboard/customer/orders"><FaShoppingBag /> My Orders</NavLink></li>
                             <li><NavLink to="/dashboard/customer/wishlist"><FaHeart /> Wishlist</NavLink></li>
+                            <li><NavLink to="/dashboard/customer/paymentHistory"><FaCcAmazonPay /> Payment History</NavLink></li>
                             <li><NavLink to="/dashboard/customer/profile"><FaUser /> Profile</NavLink></li>
                         </>
                     )}
