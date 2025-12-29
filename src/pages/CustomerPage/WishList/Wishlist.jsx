@@ -59,7 +59,6 @@ const Wishlist = () => {
                 userEmail: user.email,
                 product,
             });
-
             Swal.fire({
                 icon: "success",
                 title: "Added to Cart",
@@ -70,7 +69,6 @@ const Wishlist = () => {
             console.error(err);
         }
     };
-
     /* ================= UI ================= */
     if (loading) {
         return (
@@ -90,7 +88,7 @@ const Wishlist = () => {
             </div>
         );
     }
-
+console.log(wishlist)
     return (
         <div className="p-4 md:p-6">
             <h2 className="text-2xl font-bold mb-6">My Wishlist</h2>

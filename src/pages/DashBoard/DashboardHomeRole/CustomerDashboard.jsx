@@ -8,7 +8,6 @@ import {
     FaTruck,
     FaMoneyBillWave,
     FaUser,
-    FaBell,
 } from "react-icons/fa";
 import UseAuth from "../../../hooks/UseAuth";
 import UseAxios from "../../../hooks/UseAxios";
@@ -18,27 +17,54 @@ const CustomerDashboard = () => {
     const { user } = UseAuth();
     const axiosSecure = UseAxios();
 
-    /* ================= STATS ================= */
-    const { data: stats = {}, isLoading } = useQuery({
-        queryKey: ["customer-stats", user?.email],
+    /* ================= FETCH ALL ORDERS ================= */
+    const { data: orders = [], isLoading } = useQuery({
+        queryKey: ["orders", user?.email],
+        enabled: !!user?.email,
         queryFn: async () => {
-            const res = await axiosSecure.get(`/customer-stats?email=${user?.email}`);
+            const res = await axiosSecure.get(`/orders?email=${user.email}`);
             return res.data;
         },
-        enabled: !!user?.email,
     });
 
-    /* ================= RECENT ORDERS ================= */
-    const { data: recentOrders = [] } = useQuery({
-        queryKey: ["recent-orders", user?.email],
-        queryFn: async () => {
-            const res = await axiosSecure.get(`/recent-orders?email=${user?.email}`);
-            return res.data;
-        },
-        enabled: !!user?.email,
-    });
-console.log(recentOrders)
+    console.log("all order history ", orders)
     if (isLoading) return <Loading />;
+
+    /* ================= CALCULATE STATS ================= */
+    const totalOrders = orders.length;
+    const pendingOrders = orders.filter(o => o.status === "pending").length;
+    const paidOrders = orders.filter(o => o.status === "paid").length;
+    const shippedOrders = orders.filter(o => o.status === "shipped").length;
+    const deliveredOrders = orders.filter(o => o.status === "delivered").length;
+
+    const totalSpent = orders
+        .filter(o => o.status === "paid")
+        .reduce((sum, o) => sum + Number(o.totalAmount || 0), 0);
+
+    const recentOrders = [...orders]
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 5);
+
+    /* ================= NOTIFICATIONS ================= */
+    const notifications = orders
+        .filter(order =>
+            ["paid", "shipped", "delivered"].includes(order.status)
+        )
+        .slice(0, 5)
+        .map(order => {
+            if (order.status === "paid") {
+                return `💳 Your order #${order._id.slice(-6)} has been paid successfully.`;
+            }
+            if (order.status === "shipped") {
+                return `🚚 Your order #${order._id.slice(-6)} has been shipped.`;
+            }
+            if (order.status === "delivered") {
+                return `📦 Your order #${order._id.slice(-6)} has been delivered.`;
+            }
+            return null;
+        })
+        .filter(Boolean);
+
 
     return (
         <div className="p-4 md:p-8 space-y-10">
@@ -52,38 +78,36 @@ console.log(recentOrders)
                 </p>
             </div>
 
-            {/* Quick Stats */}
+            {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
-                <StatCard title="Total Orders" value={stats.totalOrders} icon={<FaShoppingBag />} />
-                <StatCard title="Pending" value={stats.pendingOrders} icon={<FaClock />} />
-                <StatCard title="Shipped" value={stats.shippedOrders} icon={<FaTruck />} />
-                <StatCard title="Delivered" value={stats.deliveredOrders} icon={<FaCheckCircle />} />
-                <StatCard title="Wishlist" value={stats.wishlistCount} icon={<FaHeart />} />
-                <StatCard title="Total Spent" value={`$${stats.totalSpent || 0}`} icon={<FaMoneyBillWave />} />
+                <StatCard title="Total Orders" value={totalOrders} icon={<FaShoppingBag />} />
+                <StatCard title="Pending" value={pendingOrders} icon={<FaClock />} />
+                <StatCard title="Paid" value={paidOrders} icon={<FaMoneyBillWave />} />
+                <StatCard title="Shipped" value={shippedOrders} icon={<FaTruck />} />
+                <StatCard title="Delivered" value={deliveredOrders} icon={<FaCheckCircle />} />
+                <StatCard title="Total Spent" value={`$${totalSpent}`} icon={<FaMoneyBillWave />} />
             </div>
 
             {/* Shortcuts */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <Shortcut to="/dashboard/customer/orders" label="My Orders" icon={<FaShoppingBag />} />
                 <Shortcut to="/dashboard/customer/wishlist" label="Wishlist" icon={<FaHeart />} />
-                <Shortcut to="/dashboard/customer/profile" label="Profile Settings" icon={<FaUser />} />
+                <Shortcut to="/profile" label="Profile Settings" icon={<FaUser />} />
             </div>
-
-            {/* Notifications (Optional) */}
-            {stats.notifications?.length > 0 && (
+            {/* Notifications */}
+            {notifications.length > 0 && (
                 <div className="card bg-base-100 shadow p-6">
-                    <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <FaBell /> Notifications
-                    </h3>
-                    <ul className="mt-3 space-y-2">
-                        {stats.notifications.map((n, idx) => (
+                    <h3 className="text-lg font-semibold mb-3">🔔 Notifications</h3>
+                    <ul className="space-y-2">
+                        {notifications.map((note, idx) => (
                             <li key={idx} className="text-sm text-gray-600">
-                                • {n}
+                                • {note}
                             </li>
                         ))}
                     </ul>
                 </div>
             )}
+
 
             {/* Recent Orders */}
             <div>
@@ -104,8 +128,7 @@ console.log(recentOrders)
                                 </tr>
                             </thead>
                             <tbody>
-                               
-                                {recentOrders.map((order) => (
+                                {recentOrders.map(order => (
                                     <tr key={order._id}>
                                         <td>{order._id.slice(-6)}</td>
                                         <td>${order.totalAmount}</td>
@@ -114,7 +137,7 @@ console.log(recentOrders)
                                         <td>
                                             <Link
                                                 to={`/dashboard/customer/orders/${order._id}`}
-                                                className="btn btn-primary btn-xs"
+                                                className="btn btn-primary btn-xs text-white"
                                             >
                                                 View
                                             </Link>
@@ -130,14 +153,14 @@ console.log(recentOrders)
     );
 };
 
-/* ================= REUSABLE COMPONENTS ================= */
+/* ================= REUSABLE ================= */
 
 const StatCard = ({ title, value, icon }) => (
-    <div className="card bg-base-100 shadow p-4 flex flex-row items-center gap-4">
+    <div className="card bg-base-100 shadow p-4 flex items-center gap-4">
         <div className="text-3xl text-primary">{icon}</div>
         <div>
             <p className="text-sm text-gray-500">{title}</p>
-            <h3 className="text-xl font-bold">{value || 0}</h3>
+            <h3 className="text-xl font-bold">{value}</h3>
         </div>
     </div>
 );

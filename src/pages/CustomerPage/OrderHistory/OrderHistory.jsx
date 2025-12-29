@@ -24,13 +24,14 @@ const OrderHistory = () => {
             return res.data;
         },
     });
-    console.log("order details", orders)
+    console.log("order history details", orders)
+
     if (isLoading) {
         return <div className="text-center py-20">Loading orders...</div>;
     }
     const handlePay = (order) => {
         console.log("Proceed to payment for", order);
-        if (order.payment_status === "paid") {
+        if (order.status === "paid") {
             Swal.fire({
                 icon: "info",
                 title: "Already Paid",
@@ -121,9 +122,13 @@ const OrderHistory = () => {
                                     </Link>
                                     <Link
                                         onClick={() => handlePay(order)}
-                                        className="btn btn-xs btn-primary text-white"
+                                        disabled={order.status === "paid"}
+                                        className={`btn btn-xs text-white ${order.status === "paid"
+                                            ? "btn-success cursor-not-allowed"
+                                            : "btn-primary"
+                                            }`}
                                     >
-                                        Pay
+                                        {order.status === "paid" ? "Paid" : "Pay"}
                                     </Link>
                                 </td>
                             </tr>
@@ -154,9 +159,13 @@ const OrderHistory = () => {
                                 </Link>
                                 <Link
                                     onClick={() => handlePay(order)}
-                                    className="btn btn-sm btn-primary text-white"
+                                    disabled={order.status === "paid"}
+                                    className={`btn btn-xs text-white ${order.status === "paid"
+                                        ? "btn-success cursor-not-allowed"
+                                        : "btn-primary"
+                                        }`}
                                 >
-                                    Pay
+                                    {order.status === "paid" ? "Paid" : "Pay"}
                                 </Link>
                             </div>
                         </div>

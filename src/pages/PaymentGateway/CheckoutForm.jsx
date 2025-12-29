@@ -1,7 +1,7 @@
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 import UseAuth from '../../hooks/UseAuth';
 import Loading from '../Loading/Loading';
@@ -15,6 +15,7 @@ const CheckoutForm = () => {
     const { orderId } = useParams();
     const axiosSecure = UseAxiosSecure();
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
 
     const { data: orderInfo = {}, isPending } = useQuery({
@@ -24,6 +25,8 @@ const CheckoutForm = () => {
             return res.data;
         }
     })
+
+
     if (isPending) {
         return <Loading></Loading>
     }
@@ -113,7 +116,13 @@ const CheckoutForm = () => {
                     // })
 
 
-                    navigate('/dashboard/customer/orders')
+                    await queryClient.invalidateQueries({
+                        queryKey: ["orders"],
+                        exact: false,
+                    });
+                    await queryClient.invalidateQueries(["customer-orders"]);
+
+                    navigate("/dashboard/customer/orders");
 
                 }
             }
