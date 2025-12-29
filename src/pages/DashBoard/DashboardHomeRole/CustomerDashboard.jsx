@@ -38,7 +38,7 @@ const CustomerDashboard = () => {
     const deliveredOrders = orders.filter(o => o.status === "delivered").length;
 
     const totalSpent = orders
-        .filter(o => o.status === "paid")
+        .filter(o => o.status === "paid" || o.status === "delivered")
         .reduce((sum, o) => sum + Number(o.totalAmount || 0), 0);
 
     const recentOrders = [...orders]

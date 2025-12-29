@@ -74,7 +74,7 @@ const AdminManageOrders = () => {
                     <thead>
                         <tr>
                             <th>Order</th>
-                            <th>User</th>
+                            <th>User </th>
                             <th>Seller</th>
                             <th>Total</th>
                             <th>Status</th>
@@ -90,7 +90,7 @@ const AdminManageOrders = () => {
                                         {o._id.slice(0, 8)}...
                                     </Link>
                                 </td>
-                                <td>{o.userName}</td>
+                                <td>{o.email}</td>
                                 <td>
                                     <Link to={`/stores/${o.sellerId}`} className="link">
                                         {o.sellerName}

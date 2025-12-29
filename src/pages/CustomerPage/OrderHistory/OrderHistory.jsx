@@ -29,6 +29,7 @@ const OrderHistory = () => {
     if (isLoading) {
         return <div className="text-center py-20">Loading orders...</div>;
     }
+
     const handlePay = (order) => {
         console.log("Proceed to payment for", order);
         if (order.status === "paid") {
@@ -97,14 +98,29 @@ const OrderHistory = () => {
                                 <td>{order._id}</td>
                                 <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                                 <td>
-                                    <span
+                                    {/* <span
                                         className={`px-3 py-1 rounded-full text-sm font-medium ${order.status === "paid"
                                             ? "bg-green-100 text-green-700"
                                             : "bg-red-100 text-red-700"
                                             }`}
                                     >
                                         {order.status === "paid" ? "Paid" : "Unpaid"}
-                                    </span>
+                                    </span> */}
+
+                                    {order.status === "delivered" ? (
+                                        <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
+                                            Delivered
+                                        </span>
+                                    ) : (
+                                        <span
+                                            className={`px-3 py-1 rounded-full text-sm font-medium ${order.status === "paid"
+                                                ? "bg-green-100 text-green-700"
+                                                : "bg-red-100 text-red-700"
+                                                }`}
+                                        >
+                                            {order.status === "paid" ? "Paid" : "Unpaid"}
+                                        </span>
+                                    )}
                                 </td>
                                 <td>${order.totalAmount}</td>
                                 <td className="space-x-2">
@@ -122,13 +138,14 @@ const OrderHistory = () => {
                                     </Link>
                                     <Link
                                         onClick={() => handlePay(order)}
-                                        disabled={order.status === "paid"}
-                                        className={`btn btn-xs text-white ${order.status === "paid"
+                                        disabled={order.status === "paid" || order.status === "delivered"}
+                                        className={`btn btn-xs text-white ${order.status === "delivered" ? "btn-success cursor-not-allowed" : order.status === "paid"
                                             ? "btn-success cursor-not-allowed"
                                             : "btn-primary"
                                             }`}
                                     >
-                                        {order.status === "paid" ? "Paid" : "Pay"}
+                                        {order.status === "delivered" ? "Delivered"
+                                            : order.status === "paid" ? "Paid" : "Pay"}
                                     </Link>
                                 </td>
                             </tr>
