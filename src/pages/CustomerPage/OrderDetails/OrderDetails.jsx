@@ -20,6 +20,7 @@ const OrderDetails = () => {
         },
     });
 
+    console.log('orders details', order)
     /* ================= CANCEL COUNTDOWN ================= */
     useEffect(() => {
         if (!order) return;
@@ -79,7 +80,7 @@ const OrderDetails = () => {
     if (isLoading) {
         return <div className="text-center py-20">Loading order...</div>;
     }
-    if (!order || !order.products) {
+    if (!order || !order.items || order.items.length === 0) {
         return <div className="text-center py-20">Order not found</div>;
     }
 
@@ -121,7 +122,7 @@ const OrderDetails = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {order.products?.map((item) => (
+                            {order.items?.map((item) => (
                                 <tr key={item.productId}>
                                     <td className="flex items-center gap-3">
                                         <img
@@ -148,9 +149,9 @@ const OrderDetails = () => {
             {/* ================= SHIPPING ================= */}
             <div className="card bg-base-100 shadow p-6">
                 <h3 className="font-semibold mb-2">Shipping Details</h3>
-                <p>{order.shipping.address}</p>
-                <p>Phone: {order.shipping.phone}</p>
-                <p>Method: {order.shipping.method}</p>
+                <p>{order.shipping?.address}</p>
+                <p>Phone: {order.shipping?.phone}</p>
+                <p>Method: {order.shipping?.method}</p>
             </div>
 
             {/* ================= BILLING ================= */}
@@ -176,7 +177,7 @@ const OrderDetails = () => {
 
                 <button
                     onClick={handleReorder}
-                    disabled={!order.products?.length}
+                    disabled={!order.items?.length}
                     className="btn btn-primary text-white"
                 >
                     Reorder
