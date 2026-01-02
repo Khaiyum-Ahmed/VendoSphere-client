@@ -89,7 +89,7 @@ const CheckoutPage = () => {
 
             const orderData = {
                 email: user.email,
-                products: cart,
+                items: cart,
                 shipping,
                 shippingCost,
                 paymentMethod,
