@@ -187,11 +187,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "seller/add-product",
-        element: (
+        element: 
           <SellerRoute>
             <AddProduct />
           </SellerRoute>
-        ),
+        ,
       },
       {
         path: "seller/manage-products",

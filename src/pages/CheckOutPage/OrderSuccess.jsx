@@ -17,6 +17,7 @@ console.log('oID', orderId)
         enabled: !!orderId,
     });
     console.log("order-success", orderId)
+    console.log('order idddddd', order)
 
     if (isLoading) return <Loading />;
 
@@ -169,7 +170,7 @@ console.log('oID', orderId)
 
                 <Link
                     to={`/dashboard/customer/orders/${order._id}`}
-                    className="btn btn-primary"
+                    className="btn btn-primary text-white"
                 >
                     View Order Details
                 </Link>

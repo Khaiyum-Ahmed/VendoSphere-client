@@ -21,6 +21,7 @@ const CheckoutPage = () => {
     const axios = UseAxios();
     const navigate = useNavigate();
     const { cart, clearCart } = UseCart();
+    console.log('cart items ', cart)
 
     const [shipping, setShipping] = useState({
         name: user?.displayName || "",
@@ -87,7 +88,7 @@ const CheckoutPage = () => {
             setLoading(true);
 
             const orderData = {
-                userEmail: user.email,
+                email: user.email,
                 products: cart,
                 shipping,
                 shippingCost,
@@ -99,9 +100,10 @@ const CheckoutPage = () => {
 
             const res = await axios.post("/orders", orderData);
 
+            console.log('res data', res)
             clearCart();
-            if (res.data?.orderId) {
-                navigate(`/order-success/${res.data.orderId}`);
+            if (res.data?.insertedId) {
+                navigate(`/order-success/${res.data.insertedId}`);
             }
 
         } catch (err) {
@@ -151,8 +153,8 @@ const CheckoutPage = () => {
                             onChange={(e) => setShipping({ ...shipping, city: e.target.value })}
                         >
                             <option value="">Select District</option>
-                            {BD_DISTRICTS.map((d) => (
-                                <option key={d} value={d}>
+                            {BD_DISTRICTS.map((d,idx) => (
+                                <option key={idx} value={d}>
                                     {d}
                                 </option>
                             ))}
@@ -192,7 +194,7 @@ const CheckoutPage = () => {
                 <h3 className="font-semibold">Order Summary</h3>
 
                 {cart.map((item) => (
-                    <div key={item._id} className="flex justify-between text-sm">
+                    <div key={item.productId} className="flex justify-between text-sm">
                         <span>
                             {item.name} × {item.quantity}
                         </span>

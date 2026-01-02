@@ -18,9 +18,18 @@ const OrderHistory = () => {
         queryKey: ["orders", status, sort, search],
         enabled: !!user?.email,
         queryFn: async () => {
-            const res = await axios.get(
-                `/orders?email=${user.email}&status=${status}&sort=${sort}&search=${search}`
-            );
+            const params = {
+                email: user.email,
+                sort,
+                search,
+            };
+
+            // ✅ Only add status when user selects one
+            if (status) {
+                params.status = status;
+            }
+
+            const res = await axios.get("/orders", { params });
             return res.data;
         },
     });
@@ -64,10 +73,11 @@ const OrderHistory = () => {
                     onChange={(e) => setStatus(e.target.value)}
                 >
                     <option value="">All Status</option>
-                    <option>Pending</option>
-                    <option>Shipped</option>
-                    <option>Delivered</option>
-                    <option>Cancelled</option>
+                    <option value="pending">Pending</option>
+                    <option value="paid">Paid</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="cancelled">Cancelled</option>
                 </select>
 
                 <select
@@ -98,16 +108,8 @@ const OrderHistory = () => {
                                 <td>{order._id}</td>
                                 <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                                 <td>
-                                    {/* <span
-                                        className={`px-3 py-1 rounded-full text-sm font-medium ${order.status === "paid"
-                                            ? "bg-green-100 text-green-700"
-                                            : "bg-red-100 text-red-700"
-                                            }`}
-                                    >
-                                        {order.status === "paid" ? "Paid" : "Unpaid"}
-                                    </span> */}
 
-                                    {order.status === "delivered" ? (
+                                    {/* {order.status === "delivered" ? (
                                         <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">
                                             Delivered
                                         </span>
@@ -120,7 +122,17 @@ const OrderHistory = () => {
                                         >
                                             {order.status === "paid" ? "Paid" : "Unpaid"}
                                         </span>
-                                    )}
+                                    )} */}
+                                    <span
+                                        className={`px-3 py-1 rounded-full text-sm font-medium capitalize
+        ${order.status === "paid" && "bg-green-100 text-green-700"}
+        ${order.status === "delivered" && "bg-blue-100 text-blue-700"}
+        ${order.status === "shipped" && "bg-yellow-100 text-yellow-700"}
+        ${order.status === "pending" && "bg-red-100 text-red-700"}
+        `}
+                                    >
+                                        {order.status}
+                                    </span>
                                 </td>
                                 <td>${order.totalAmount}</td>
                                 <td className="space-x-2">
@@ -138,14 +150,13 @@ const OrderHistory = () => {
                                     </Link>
                                     <Link
                                         onClick={() => handlePay(order)}
-                                        disabled={order.status === "paid" || order.status === "delivered"}
-                                        className={`btn btn-xs text-white ${order.status === "delivered" ? "btn-success cursor-not-allowed" : order.status === "paid"
+                                        disabled={order.status !== "pending"}
+                                        className={`btn btn-xs text-white ${order.status !== "pending"
                                             ? "btn-success cursor-not-allowed"
                                             : "btn-primary"
                                             }`}
                                     >
-                                        {order.status === "delivered" ? "Delivered"
-                                            : order.status === "paid" ? "Paid" : "Pay"}
+                                        {order.status === "pending" ? "Pay" : order.status}
                                     </Link>
                                 </td>
                             </tr>
@@ -176,13 +187,13 @@ const OrderHistory = () => {
                                 </Link>
                                 <Link
                                     onClick={() => handlePay(order)}
-                                    disabled={order.status === "paid"}
-                                    className={`btn btn-xs text-white ${order.status === "paid"
-                                        ? "btn-success cursor-not-allowed"
-                                        : "btn-primary"
+                                    disabled={order.status !== "pending"}
+                                    className={`btn btn-xs text-white ${order.status !== "pending"
+                                            ? "btn-success cursor-not-allowed"
+                                            : "btn-primary"
                                         }`}
                                 >
-                                    {order.status === "paid" ? "Paid" : "Pay"}
+                                    {order.status === "pending" ? "Pay" : order.status}
                                 </Link>
                             </div>
                         </div>
