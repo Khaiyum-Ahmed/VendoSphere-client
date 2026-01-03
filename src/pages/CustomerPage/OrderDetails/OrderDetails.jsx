@@ -4,13 +4,21 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import UseAxios from "../../../hooks/UseAxios";
 import { UseCart } from "../../../context/CartContext";
+import UseAuth from "../../../hooks/UseAuth";
 
 const OrderDetails = () => {
     const { orderId } = useParams();
     const axios = UseAxios();
-    const [timeLeft, setTimeLeft] = useState(null);
     const navigate = useNavigate();
     const { reorderCart } = UseCart();
+    const { user } = UseAuth();
+
+    const [timeLeft, setTimeLeft] = useState(null);
+
+    /* ===== TESTIMONIAL STATES ===== */
+    const [openTestimonial, setOpenTestimonial] = useState(false);
+    const [rating, setRating] = useState(5);
+    const [message, setMessage] = useState("");
 
     const { data: order, isLoading, refetch } = useQuery({
         queryKey: ["order-details", orderId],
@@ -20,7 +28,6 @@ const OrderDetails = () => {
         },
     });
 
-    console.log('orders details', order)
     /* ================= CANCEL COUNTDOWN ================= */
     useEffect(() => {
         if (!order) return;
@@ -53,34 +60,38 @@ const OrderDetails = () => {
 
         if (!confirm.isConfirmed) return;
 
-        try {
-            await axios.patch(`/orders/${orderId}/cancel`);
-            Swal.fire("Cancelled", "Your order has been cancelled", "success");
-            refetch();
-        } catch (err) {
-            Swal.fire("Error", err.response?.data?.message || "Failed", "error");
-        }
+        await axios.patch(`/orders/${orderId}/cancel`);
+        Swal.fire("Cancelled", "Your order has been cancelled", "success");
+        refetch();
     };
 
     const handleReorder = async () => {
-        try {
-            await reorderCart(orderId);
-
-            Swal.fire("Success", "Items added to cart", "success");
-            navigate("/cart");
-        } catch (err) {
-            Swal.fire(
-                "Error",
-                err.response?.data?.message || "Reorder failed",
-                "error"
-            );
-        }
+        await reorderCart(orderId);
+        Swal.fire("Success", "Items added to cart", "success");
+        navigate("/cart");
     };
 
-    if (isLoading) {
-        return <div className="text-center py-20">Loading order...</div>;
-    }
-    if (!order || !order.items || order.items.length === 0) {
+    /* ================= SUBMIT TESTIMONIAL ================= */
+    const handleTestimonialSubmit = async () => {
+        if (!message) {
+            return Swal.fire("Error", "Please write a message", "error");
+        }
+
+        await axios.post("/testimonials", {
+            name: user?.displayName,
+            avatar: user?.photoURL,
+            message,
+            rating,
+        });
+
+        Swal.fire("Thank you!", "Testimonial submitted", "success");
+        setOpenTestimonial(false);
+        setMessage("");
+        setRating(5);
+    };
+
+    if (isLoading) return <div className="text-center py-20">Loading...</div>;
+    if (!order || !order.items?.length) {
         return <div className="text-center py-20">Order not found</div>;
     }
 
@@ -99,91 +110,102 @@ const OrderDetails = () => {
                 </div>
                 <div>
                     <p><strong>Payment:</strong> {order.paymentMethod}</p>
-                    {canCancel && (
-                        <p className="text-red-500">
-                            Cancel within: {Math.floor(timeLeft / 60)}m {timeLeft % 60}s
-                        </p>
-                    )}
                 </div>
             </div>
 
             {/* ================= PRODUCTS ================= */}
             <div className="card bg-base-100 shadow p-6">
-                <h3 className="font-semibold mb-4">Products</h3>
-
-                <div className="overflow-x-auto">
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Qty</th>
-                                <th>Price</th>
-                                <th>Subtotal</th>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {order.items.map(item => (
+                            <tr key={item.productId}>
+                                <td className="flex items-center gap-3">
+                                    <img src={item.image} className="w-12 h-12 rounded" />
+                                    <Link to={`/product/${item.productId}`}>
+                                        {item.name}
+                                    </Link>
+                                </td>
+                                <td>{item.quantity}</td>
+                                <td>${item.price}</td>
+                                <td>${item.price * item.quantity}</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {order.items?.map((item) => (
-                                <tr key={item.productId}>
-                                    <td className="flex items-center gap-3">
-                                        <img
-                                            src={item.image}
-                                            className="w-12 h-12 object-cover rounded"
-                                        />
-                                        <Link
-                                            to={`/product/${item.productId}`}
-                                            className="hover:underline"
-                                        >
-                                            {item.name}
-                                        </Link>
-                                    </td>
-                                    <td>{item.quantity}</td>
-                                    <td>${item.price}</td>
-                                    <td>${item.price * item.quantity}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            {/* ================= SHIPPING ================= */}
-            <div className="card bg-base-100 shadow p-6">
-                <h3 className="font-semibold mb-2">Shipping Details</h3>
-                <p>{order.shipping?.address}</p>
-                <p>Phone: {order.shipping?.phone}</p>
-                <p>Method: {order.shipping?.method}</p>
-            </div>
-
-            {/* ================= BILLING ================= */}
-            <div className="card bg-base-100 shadow p-6">
-                <h3 className="font-semibold mb-2">Billing Summary</h3>
-                <p>Subtotal: ${order.subtotal}</p>
-                <p>Shipping: ${order.shippingCost}</p>
-                <p>Discount: -${order.discount}</p>
-                <p className="text-xl font-bold">
-                    Total: ${order.totalAmount}
-                </p>
+                        ))}
+                    </tbody>
+                </table>
             </div>
 
             {/* ================= ACTIONS ================= */}
             <div className="flex flex-wrap gap-4">
-                <button className="btn btn-outline">Track Shipment</button>
-
                 {canCancel && (
                     <button onClick={handleCancel} className="btn btn-error text-white">
                         Cancel Order
                     </button>
                 )}
 
-                <button
-                    onClick={handleReorder}
-                    disabled={!order.items?.length}
-                    className="btn btn-primary text-white"
-                >
+                <button onClick={handleReorder} className="btn btn-primary text-white">
                     Reorder
                 </button>
 
+                {/* ⭐ TESTIMONIAL BUTTON */}
+                {order.status === "delivered" && (
+                    <button
+                        onClick={() => setOpenTestimonial(true)}
+                        className="btn btn-outline"
+                    >
+                        Write Testimonial
+                    </button>
+                )}
             </div>
+
+            {/* ================= TESTIMONIAL MODAL ================= */}
+            {openTestimonial && (
+                <div className="fixed inset-0 bg-base-300 bg-opacity-50 flex items-center justify-center">
+                    <div className="bg-white p-6 rounded w-full max-w-md">
+                        <h3 className="text-xl font-bold mb-3">Write Testimonial</h3>
+
+                        <label className="block mb-2">Rating</label>
+                        <select
+                            className="select select-bordered w-full mb-3"
+                            value={rating}
+                            onChange={(e) => setRating(Number(e.target.value))}
+                        >
+                            {[1, 2, 3, 4, 5].map(r => (
+                                <option key={r} value={r}>{r} Star</option>
+                            ))}
+                        </select>
+
+                        <textarea
+                            className="textarea textarea-bordered w-full"
+                            placeholder="Write your experience..."
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                        />
+
+                        <div className="flex justify-end gap-3 mt-4">
+                            <button
+                                onClick={() => setOpenTestimonial(false)}
+                                className="btn btn-ghost"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleTestimonialSubmit}
+                                className="btn btn-primary text-white"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
